@@ -1,0 +1,3 @@
+[submodule "Clockwork/Assets/Dependancies/Framework"]
+	path = Clockwork/Assets/Dependancies/Framework
+	url = https://github.com/scsewell/UnityFramework
