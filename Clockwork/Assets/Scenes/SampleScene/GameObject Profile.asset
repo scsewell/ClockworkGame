@@ -66,7 +66,7 @@ MonoBehaviour:
     showEyeDropper: 1
   meanFreePath:
     m_OverrideState: 1
-    m_Value: 50
+    m_Value: 17.5
     min: 1
   anisotropy:
     m_OverrideState: 1
@@ -170,7 +170,7 @@ MonoBehaviour:
     max: 10000
   depthDistributionUniformity:
     m_OverrideState: 1
-    m_Value: 0.6
+    m_Value: 0.35
     min: 0
     max: 1
 --- !u!114 &114992894068159058

@@ -17,7 +17,7 @@ MonoBehaviour:
   - {fileID: 114709323159108334}
   - {fileID: 114784228642241204}
   - {fileID: 114824927445317408}
-  - {fileID: 114439231041768348}
+  - {fileID: 114728869888123674}
 --- !u!114 &114190001195344696
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -122,10 +122,10 @@ MonoBehaviour:
     value: 100
   lift:
     overrideState: 1
-    value: {x: 0.54401755, y: 0.6626232, z: 1, w: -0.21466511}
+    value: {x: 0.42511666, y: 0.56503594, z: 1, w: -0.21466511}
   gamma:
     overrideState: 1
-    value: {x: 0.979668, y: 1, z: 0.94762164, w: -0.15267177}
+    value: {x: 0.9813837, y: 1, z: 0.9268949, w: -0.15267177}
   gain:
     overrideState: 1
     value: {x: 1, y: 0.87435305, z: 0.8359838, w: 0}
@@ -1329,28 +1329,6 @@ MonoBehaviour:
       - 0.5
       - 0.5
       - 0.5
---- !u!114 &114439231041768348
-MonoBehaviour:
-  m_ObjectHideFlags: 3
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b94fcd11afffcb142908bfcb1e261fba, type: 3}
-  m_Name: MotionBlur
-  m_EditorClassIdentifier: 
-  active: 1
-  enabled:
-    overrideState: 1
-    value: 1
-  shutterAngle:
-    overrideState: 1
-    value: 270
-  sampleCount:
-    overrideState: 1
-    value: 10
 --- !u!114 &114709323159108334
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -1398,6 +1376,34 @@ MonoBehaviour:
   dirtIntensity:
     overrideState: 1
     value: 0
+--- !u!114 &114728869888123674
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 556797029e73b2347956b6579e77e05b, type: 3}
+  m_Name: DepthOfField
+  m_EditorClassIdentifier: 
+  active: 1
+  enabled:
+    overrideState: 1
+    value: 1
+  focusDistance:
+    overrideState: 1
+    value: 7.5
+  aperture:
+    overrideState: 1
+    value: 2.5
+  focalLength:
+    overrideState: 1
+    value: 65
+  kernelSize:
+    overrideState: 1
+    value: 1
 --- !u!114 &114784228642241204
 MonoBehaviour:
   m_ObjectHideFlags: 3
