@@ -102,7 +102,7 @@ MonoBehaviour:
       punctualShadowQuality: 0
       directionalShadowQuality: 1
     decalSettings:
-      drawDistance: 1000
+      drawDistance: 40
       atlasWidth: 4096
       atlasHeight: 4096
       perChannelMask: 0

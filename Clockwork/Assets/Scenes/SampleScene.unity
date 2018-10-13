@@ -558,7 +558,7 @@ GameObject:
   - component: {fileID: 534669907}
   - component: {fileID: 534669906}
   m_Layer: 0
-  m_Name: Main Camera
+  m_Name: MainCamera
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -594,7 +594,7 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 4.5
+  near clip plane: 5
   far clip plane: 40
   field of view: 40
   orthographic: 0
@@ -710,8 +710,8 @@ MonoBehaviour:
   volumeLayer:
     serializedVersion: 2
     m_Bits: 256
-  stopNaNPropagation: 1
-  antialiasingMode: 3
+  stopNaNPropagation: 0
+  antialiasingMode: 1
   temporalAntialiasing:
     jitterSpread: 0.75
     sharpness: 0.25
@@ -1143,7 +1143,7 @@ PrefabInstance:
     - target: {fileID: 2300004, guid: d3735e0e0536dbc43b1d7fcb6f59bbdf, type: 3}
       propertyPath: m_Materials.Array.data[1]
       value: 
-      objectReference: {fileID: 2100000, guid: 4c11623c8a07db54ab8937f694c6bcfe, type: 2}
+      objectReference: {fileID: 2100000, guid: 487a9fc54b039d347a49a115ff31ca6b, type: 2}
     - target: {fileID: 2300002, guid: d3735e0e0536dbc43b1d7fcb6f59bbdf, type: 3}
       propertyPath: m_Materials.Array.data[1]
       value: 
@@ -1171,7 +1171,7 @@ PrefabInstance:
     - target: {fileID: 2300004, guid: d3735e0e0536dbc43b1d7fcb6f59bbdf, type: 3}
       propertyPath: m_Materials.Array.data[2]
       value: 
-      objectReference: {fileID: 2100000, guid: 487a9fc54b039d347a49a115ff31ca6b, type: 2}
+      objectReference: {fileID: 2100000, guid: 4c11623c8a07db54ab8937f694c6bcfe, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d3735e0e0536dbc43b1d7fcb6f59bbdf, type: 3}
 --- !u!4 &688842821 stripped

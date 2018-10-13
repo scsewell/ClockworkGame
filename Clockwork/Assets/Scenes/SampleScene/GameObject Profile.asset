@@ -112,7 +112,7 @@ MonoBehaviour:
   active: 1
   maxShadowDistance:
     m_OverrideState: 1
-    m_Value: 50
+    m_Value: 40
     min: 0
   cascadeShadowSplitCount:
     m_OverrideState: 1
@@ -165,12 +165,12 @@ MonoBehaviour:
   active: 1
   depthRange:
     m_OverrideState: 1
-    m_Value: {x: 0.5, y: 128}
+    m_Value: {x: 0.5, y: 40}
     min: 0.01
     max: 10000
   depthDistributionUniformity:
     m_OverrideState: 1
-    m_Value: 0.35
+    m_Value: 0.75
     min: 0
     max: 1
 --- !u!114 &114992894068159058
