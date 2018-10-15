@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ddd81e40004f92459092b47c7e61723, type: 3}
+  m_Name: FloatingCities
+  m_EditorClassIdentifier: 
+  m_mixer: {fileID: 243415641413158346, guid: 28b8be49270548e44be31fd4d1aa1e52, type: 2}
+  m_track: {fileID: 8300000, guid: fc957d1406706924886223219229c78b, type: 3}
+  m_name: FloatingCities
+  m_artist: Kevin Macleod
+  m_minutes: 2
+  m_seconds: 58.004319

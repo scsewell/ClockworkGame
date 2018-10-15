@@ -17,16 +17,15 @@ public class Automaton : MonoBehaviour
         float speedH = Input.GetAxis("Horizontal");
         m_anim.SetFloat("SpeedH", Mathf.MoveTowards(m_anim.GetFloat("SpeedH"), Mathf.Abs(speedH), Time.deltaTime * 3.0f));
 
-        m_anim.SetBool("Flip", false);
         if (m_facingRight && speedH < -0.1f)
         {
             m_facingRight = false;
-            m_anim.SetBool("Flip", true);
+            m_anim.SetBool("PivotRight", true);
         }
         else if (!m_facingRight && speedH > 0.1f)
         {
             m_facingRight = true;
-            m_anim.SetBool("Flip", true);
+            m_anim.SetBool("PivotLeft", true);
         }
         
         transform.rotation = Quaternion.Euler(0, Mathf.MoveTowards(transform.rotation.eulerAngles.y, m_facingRight ? 90 : 270, 1.365f * Time.deltaTime * 180), 0);
@@ -34,6 +33,9 @@ public class Automaton : MonoBehaviour
 
     public void LateUpdate()
     {
+        m_anim.SetBool("PivotLeft", false);
+        m_anim.SetBool("PivotRight", false);
+
         m_constraints.VisualUpdate();
     }
 }

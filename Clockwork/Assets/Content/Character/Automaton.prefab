@@ -271,9 +271,9 @@ Light:
   serializedVersion: 8
   m_Type: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 59.397427
+  m_Intensity: 34.013924
   m_Range: 10
-  m_SpotAngle: 60
+  m_SpotAngle: 80
   m_CookieSize: 10
   m_Shadows:
     m_Type: 1
@@ -652,7 +652,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6206faabf5708784897c69305c14ec8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_volumeScale: 0.1
+  m_volumeScale: 0.165
   m_volumeSmoothing: 0.15
 --- !u!82 &2049430830554659904
 AudioSource:
@@ -1564,7 +1564,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6206faabf5708784897c69305c14ec8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_volumeScale: 0.125
+  m_volumeScale: 0.2
   m_volumeSmoothing: 0.3
 --- !u!82 &4023776223268822613
 AudioSource:
@@ -2924,7 +2924,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6206faabf5708784897c69305c14ec8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_volumeScale: 0.125
+  m_volumeScale: 0.2
   m_volumeSmoothing: 0.3
 --- !u!82 &3335619239250758433
 AudioSource:
@@ -3943,7 +3943,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6206faabf5708784897c69305c14ec8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_volumeScale: 0.1
+  m_volumeScale: 0.165
   m_volumeSmoothing: 0.15
 --- !u!82 &4687756942395920971
 AudioSource:

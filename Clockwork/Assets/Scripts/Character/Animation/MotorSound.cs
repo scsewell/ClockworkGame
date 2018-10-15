@@ -22,7 +22,7 @@ public class MotorSound : MonoBehaviour
     private void LateUpdate()
     {
         Quaternion rot = transform.localRotation;
-        float targetVol =  0.005f * m_volumeScale * Mathf.Abs(Quaternion.Angle(m_lastRot, rot)) / Time.deltaTime;
+        float targetVol = Mathf.Pow((0.005f * m_volumeScale / Time.deltaTime) * Mathf.Abs(Quaternion.Angle(m_lastRot, rot)), 2.0f);
         m_audio.volume = Mathf.Lerp(m_audio.volume, targetVol, Time.deltaTime / m_volumeSmoothing);
         m_lastRot = rot;
     }
