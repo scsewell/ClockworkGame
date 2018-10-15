@@ -9,7 +9,7 @@ public class CharacterAnimation : MonoBehaviour
         m_contraints = GetComponentsInChildren<IRigConstraint>(true);
     }
     
-    private void LateUpdate()
+    public void VisualUpdate()
     {
         for (int i = 0; i < m_contraints.Length; i++)
         {
