@@ -318,7 +318,7 @@ MonoBehaviour:
   enableSpotReflector: 1
   m_InnerSpotPercent: 0
   lightDimmer: 1
-  volumetricDimmer: 0
+  volumetricDimmer: 0.135
   lightUnit: 0
   sunDiskSize: 1
   sunHaloSize: 0.1
