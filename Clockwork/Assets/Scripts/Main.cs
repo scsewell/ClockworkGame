@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class Main : MonoBehaviour
 {
@@ -8,11 +9,11 @@ public class Main : MonoBehaviour
     [Range(0, 10)]
     private float m_fadeInTime = 3.0f;
 
-    private CanvasRenderer m_fadeBlack;
+    private Image m_fadeBlack;
 
     private void Awake()
     {
-        m_fadeBlack = GetComponentInChildren<CanvasRenderer>(true);
+        m_fadeBlack = GetComponentInChildren<Image>(true);
     }
 
 #if !UNITY_EDITOR
@@ -25,8 +26,10 @@ public class Main : MonoBehaviour
     private IEnumerator LoadScene(int index)
     {
         AudioListener.pause = true;
-        AudioListener.volume = 0;
-        m_fadeBlack.SetAlpha(1f);
+        AudioListener.volume = 0f;
+
+        m_fadeBlack.enabled = true;
+        m_fadeBlack.color = new Color(0f, 0f, 0f, 1f);
 
         SceneManager.LoadScene(index, LoadSceneMode.Additive);
         
@@ -49,9 +52,11 @@ public class Main : MonoBehaviour
             float fac = 0.5f - (0.5f * Mathf.Cos(Mathf.Clamp01(duration / m_fadeInTime) * Mathf.PI));
 
             AudioListener.volume = 1f - fac;
-             m_fadeBlack.SetAlpha(Mathf.Pow(fac, 0.33f));
+            m_fadeBlack.color = new Color(0f, 0f, 0f, Mathf.Pow(fac, 0.33f));
 
             yield return null;
         }
+
+        m_fadeBlack.enabled = false;
     }
 }

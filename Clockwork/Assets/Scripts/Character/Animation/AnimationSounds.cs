@@ -7,13 +7,13 @@ public class AnimationSounds : MonoBehaviour
     private AudioSource m_foot;
 
     [SerializeField]
-    private AudioClip[] m_footSounds;
+    private AudioClipSet m_footSounds;
 
     public void Step()
     {
-        if (m_foot != null && m_footSounds.Length > 0)
+        if (m_foot != null)
         {
-            m_foot.PlayOneShot(m_footSounds.PickRandom());
+            m_foot.PlayOneShot(m_footSounds.PickClip());
         }
     }
 }
