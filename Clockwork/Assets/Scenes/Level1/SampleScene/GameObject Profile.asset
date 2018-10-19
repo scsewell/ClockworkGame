@@ -165,12 +165,12 @@ MonoBehaviour:
   active: 1
   depthRange:
     m_OverrideState: 1
-    m_Value: {x: 0.5, y: 40}
+    m_Value: {x: 2, y: 30}
     min: 0.01
     max: 10000
   depthDistributionUniformity:
     m_OverrideState: 1
-    m_Value: 0.65
+    m_Value: 0.82
     min: 0
     max: 1
 --- !u!114 &114992894068159058

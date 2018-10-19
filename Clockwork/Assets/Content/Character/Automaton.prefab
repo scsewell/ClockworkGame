@@ -3429,17 +3429,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3169a7f027303954d9e5aff64ecabbd0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_ground:
-    m_acceleration: 12
-    speed: 6.5
-  m_air:
-    m_acceleration: 2
-    speed: 5
-  m_minSpeed: 0.5
-  m_jumpSpeed: 5
   m_groundLayers:
     serializedVersion: 2
     m_Bits: 2049
+  m_ground:
+    m_acceleration: 12
+    minSpeed: 0.5
+    maxSpeed: 6.5
+  m_air:
+    m_acceleration: 2
+    minSpeed: 0
+    maxSpeed: 5
+  m_jumpBufferDuration: 0.175
+  m_jumpWait: 0.1
+  m_jumpSpeed: 5
 --- !u!114 &6953745216761794359
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3452,6 +3455,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e9387e2fb98ebe459ee2da243994cff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_walkAnimationSpeed: 1.62
+  m_runAnimationSpeed: 6.24
+  m_headLook:
+  - transform: {fileID: 4882988875594863410}
+    weight: 0.35
+    clampAngle: 45
+    smoothing: 0.125
+    lastDirWeight: 0
+    lastLookRotation: {x: 0, y: 0, z: -0.70710677, w: 0.70710677}
+  - transform: {fileID: 4882988875594863332}
+    weight: 0.5
+    clampAngle: 45
+    smoothing: 0.125
+    lastDirWeight: 0
+    lastLookRotation: {x: 0, y: 0, z: -0.70710677, w: 0.70710677}
+  - transform: {fileID: 4882988875594863328}
+    weight: 1
+    clampAngle: 60
+    smoothing: 0.125
+    lastDirWeight: 0
+    lastLookRotation: {x: 0, y: 0, z: -0.70710677, w: 0.70710677}
+  lookAtTarget: {fileID: 0}
 --- !u!114 &3315157209372039441
 MonoBehaviour:
   m_ObjectHideFlags: 0
