@@ -5648,7 +5648,7 @@ PrefabInstance:
     - target: {fileID: 4882988875594829594, guid: 90496c4da5124fa46908ae2fdb38e61a,
         type: 3}
       propertyPath: m_Name
-      value: ClockworkCharacter
+      value: Automaton
       objectReference: {fileID: 0}
     - target: {fileID: 4882988875594863344, guid: 90496c4da5124fa46908ae2fdb38e61a,
         type: 3}
@@ -6609,6 +6609,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_groundLayers.m_Bits
       value: 2049
+      objectReference: {fileID: 0}
+    - target: {fileID: 3452623470783426453, guid: 90496c4da5124fa46908ae2fdb38e61a,
+        type: 3}
+      propertyPath: m_maxSpeed
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 3452623470783426453, guid: 90496c4da5124fa46908ae2fdb38e61a,
+        type: 3}
+      propertyPath: m_acceleration
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4882988875604229338, guid: 90496c4da5124fa46908ae2fdb38e61a,
+        type: 3}
+      propertyPath: m_ApplyRootMotion
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 90496c4da5124fa46908ae2fdb38e61a, type: 3}

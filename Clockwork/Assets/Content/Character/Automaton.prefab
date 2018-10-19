@@ -3375,10 +3375,10 @@ CapsuleCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4882988875594829594}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 26af113cd37308746958304e2a4f0c1e, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.35
+  m_Radius: 0.3
   m_Height: 1.7
   m_Direction: 1
   m_Center: {x: 0, y: 0.85, z: 0}
@@ -3392,11 +3392,11 @@ Rigidbody:
   serializedVersion: 2
   m_Mass: 50
   m_Drag: 0
-  m_AngularDrag: 0.05
+  m_AngularDrag: 0
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 1
-  m_Constraints: 88
+  m_Constraints: 120
   m_CollisionDetection: 2
 --- !u!95 &4882988875604229338
 Animator:
@@ -3411,7 +3411,7 @@ Animator:
   m_Controller: {fileID: 9100000, guid: c6b364c39e639314dbcec83d1732b1d8, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
-  m_ApplyRootMotion: 1
+  m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
@@ -3429,6 +3429,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3169a7f027303954d9e5aff64ecabbd0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_ground:
+    m_acceleration: 12
+    speed: 6.5
+  m_air:
+    m_acceleration: 2
+    speed: 5
+  m_minSpeed: 0.5
+  m_jumpSpeed: 5
   m_groundLayers:
     serializedVersion: 2
     m_Bits: 2049
