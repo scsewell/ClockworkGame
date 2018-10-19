@@ -25,7 +25,7 @@ public class CharacterAnimation : MonoBehaviour
         [HideInInspector]
         public float lastDirWeight = 0f;
         [HideInInspector]
-        public Quaternion lastLookRotation = Quaternion.Euler(0, 0, -90);
+        public Quaternion lastLookRotation = Quaternion.identity;
     }
 
     [Header("LookAt")]
@@ -33,15 +33,22 @@ public class CharacterAnimation : MonoBehaviour
     [SerializeField]
     private LookAtBone[] m_headLook;
     
-    public Transform lookAtTarget = null;
-
     private Animator m_anim;
     private IRigConstraint[] m_contraints;
+    private float m_lookAtWeight = 0f;
+
+    public Transform LookAtTarget { get; set; } = null;
+    public float LookAtWeight { get; set; } = 0f;
     
     private void Awake()
     {
         m_anim = GetComponent<Animator>();
         m_contraints = GetComponentsInChildren<IRigConstraint>(true);
+        
+        foreach (LookAtBone bone in m_headLook)
+        {
+            bone.lastLookRotation = bone.transform.rotation;
+        }
     }
 
     public void VisualUpdate(Automaton automaton)
@@ -63,7 +70,8 @@ public class CharacterAnimation : MonoBehaviour
 
     public void LateVisualUpdate()
     {
-        LookAt(m_headLook, lookAtTarget, 1.0f);
+        m_lookAtWeight = Mathf.Lerp(m_lookAtWeight, LookAtWeight, Time.deltaTime / 0.2f);
+        LookAt(m_headLook, LookAtTarget, m_lookAtWeight);
 
         for (int i = 0; i < m_contraints.Length; i++)
         {

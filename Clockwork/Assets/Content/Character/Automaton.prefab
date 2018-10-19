@@ -3343,6 +3343,7 @@ GameObject:
   - component: {fileID: 4882988875604229338}
   - component: {fileID: 3452623470783426453}
   - component: {fileID: 6953745216761794359}
+  - component: {fileID: 963867107380994293}
   - component: {fileID: 3315157209372039441}
   - component: {fileID: 3443161379712794544}
   m_Layer: 16
@@ -3476,7 +3477,20 @@ MonoBehaviour:
     smoothing: 0.125
     lastDirWeight: 0
     lastLookRotation: {x: 0, y: 0, z: -0.70710677, w: 0.70710677}
-  lookAtTarget: {fileID: 0}
+--- !u!114 &963867107380994293
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4882988875594829594}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac40638dc7afc2f4e9e061e3a0d491cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_layer: {fileID: 11400000, guid: 65edcee8f4d9060419eb547175aac4e7, type: 2}
+  m_target: {fileID: 4882988875594863418}
 --- !u!114 &3315157209372039441
 MonoBehaviour:
   m_ObjectHideFlags: 0

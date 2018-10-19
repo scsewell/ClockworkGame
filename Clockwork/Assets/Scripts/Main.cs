@@ -34,7 +34,7 @@ public class Main : MonoBehaviour
         SceneManager.LoadScene(index, LoadSceneMode.Additive);
         
         // wait a few frames for everything to load nicely
-        int frameCount = 10;
+        int frameCount = 16;
         while (frameCount > 0)
         {
             frameCount--;
