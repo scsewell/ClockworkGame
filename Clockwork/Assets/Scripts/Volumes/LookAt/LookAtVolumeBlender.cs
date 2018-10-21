@@ -1,28 +1,26 @@
-﻿using Framework.Volumes;
+﻿using UnityEngine;
+using Framework.Volumes;
 
 public class LookAtVolumeBlender : VolumeBlender
 {
-    private CharacterAnimation m_anim;
-
-    protected override void Awake()
+    protected override void UpdateBlending(Transform target, VolumeLayer layer)
     {
-        base.Awake();
-        m_anim = m_target.GetComponentInChildren<CharacterAnimation>(true);
-    }
-
-    private void Update()
-    {
-        var profiles = LootAtVolumeManager.Instance.GetProfiles(m_target, m_layer);
-
-        if (profiles.Count > 0)
+        CharacterAnimation anim = target.GetComponent<CharacterAnimation>();
+        
+        if (anim != null)
         {
-            m_anim.LookAtTarget = profiles[0].volume.target;
-            m_anim.LookAtWeight = profiles[0].weight;
-        }
-        else
-        {
-            m_anim.LookAtTarget = null;
-            m_anim.LookAtWeight = 0f;
+            var profiles = LootAtVolumeManager.Instance.GetProfiles(target, layer);
+
+            if (profiles.Count > 0)
+            {
+                anim.LookAtTarget = profiles[0].volume.target;
+                anim.LookAtWeight = profiles[0].weight;
+            }
+            else
+            {
+                anim.LookAtTarget = null;
+                anim.LookAtWeight = 0f;
+            }
         }
     }
 }
