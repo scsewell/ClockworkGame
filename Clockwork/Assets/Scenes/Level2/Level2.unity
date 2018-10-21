@@ -1497,11 +1497,11 @@ MonoBehaviour:
   shadowDimmer: 1
   shadowFadeDistance: 10000
   contactShadows: 0
-  viewBiasMin: 0.2
+  viewBiasMin: 0.64
   viewBiasMax: 100
   viewBiasScale: 1
-  normalBiasMin: 0.5
-  normalBiasMax: 0.5
+  normalBiasMin: 1.07
+  normalBiasMax: 1.07
   normalBiasScale: 1
   sampleBiasScale: 0
   edgeLeakFixup: 1
@@ -1615,7 +1615,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 596197410}
   m_LocalRotation: {x: -0.06258987, y: -0.8024934, z: 0.25561035, w: -0.53549075}
-  m_LocalPosition: {x: -58.5, y: 24.4, z: 65.3}
+  m_LocalPosition: {x: -60.3, y: 24.4, z: 66.7}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 56212959}
@@ -2202,7 +2202,7 @@ MonoBehaviour:
   useOldInspector: 0
   featuresFoldout: 1
   showAdditionalSettings: 0
-  displayLightIntensity: 0.2
+  displayLightIntensity: 0.3
   displayAreaLightEmissiveMesh: 0
   lightLayers: 1
   shadowSoftness: 0.5
@@ -2219,7 +2219,7 @@ Light:
   serializedVersion: 8
   m_Type: 1
   m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
-  m_Intensity: 0.2
+  m_Intensity: 0.3
   m_Range: 10
   m_SpotAngle: 30
   m_CookieSize: 10
@@ -2242,7 +2242,7 @@ Light:
   m_LightShadowCasterMode: 2
   m_AreaSize: {x: 1, y: 1}
   m_BounceIntensity: 1
-  m_ColorTemperature: 9508
+  m_ColorTemperature: 4115
   m_UseColorTemperature: 1
   m_ShadowRadius: 0
   m_ShadowAngle: 0
