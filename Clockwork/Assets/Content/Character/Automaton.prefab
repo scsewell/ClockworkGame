@@ -3473,7 +3473,7 @@ MonoBehaviour:
     lastLookRotation: {x: 0, y: 0, z: -0.70710677, w: 0.70710677}
   - transform: {fileID: 4882988875594863328}
     weight: 1
-    clampAngle: 60
+    clampAngle: 80
     smoothing: 0.125
     lastDirWeight: 0
     lastLookRotation: {x: 0, y: 0, z: -0.70710677, w: 0.70710677}

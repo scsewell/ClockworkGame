@@ -58,6 +58,7 @@ public class Automaton : MonoBehaviour
     private float m_lastJumpTime = float.NegativeInfinity;
     private float m_lastJumpLandTime = float.NegativeInfinity;
     private bool m_jump = false;
+    private bool m_jumping = false;
 
     public bool IsGrounded { get; private set; } = true;
     public Vector3 Velocity => m_body.velocity;
@@ -71,21 +72,19 @@ public class Automaton : MonoBehaviour
 
     public void FixedUpdate()
     {
-        // sample walkable surfaces under capsule
-        Vector3 footSphereLocal = m_collider.center + ((m_collider.height / 2f) - m_collider.radius) * Vector3.down;
-        Vector3 footSphere = transform.TransformPoint(footSphereLocal);
-        float radius = m_collider.radius * 0.9f;
-        float distance = (m_collider.radius * 0.1f) + 0.01f;
-        int hitCount = Physics.SphereCastNonAlloc(footSphere, radius, Vector3.down, m_hits, distance, m_groundLayers, QueryTriggerInteraction.Ignore);
+        // update grounding
+        bool previouslyGrounded = IsGrounded;
 
-        bool grounded = hitCount > 0;
-        if (grounded != IsGrounded)
+        RaycastHit groundHit;
+        IsGrounded = CheckGrounded(out groundHit, 0.01f);
+
+        if (!previouslyGrounded && IsGrounded && m_jumping)
         {
+            m_jumping = false;
             m_lastJumpLandTime = Time.time;
-            IsGrounded = grounded;
         }
 
-       // do movement
+        // do movement
         Movement movement = IsGrounded ? m_ground : m_air;
         Vector2 velocity = m_body.velocity;
 
@@ -111,13 +110,21 @@ public class Automaton : MonoBehaviour
                 m_facingRight = true;
                 m_anim.PivotLeft();
             }
-        }
 
-        // jump
-        if (m_jump)
+            if (m_jump)
+            {
+                velocity.y = m_jumpSpeed;
+                m_jump = false;
+                m_jumping = true;
+            }
+        }
+        else if (previouslyGrounded && !m_jumping)
         {
-            velocity.y += m_jumpSpeed;
-            m_jump = false;
+            IsGrounded = CheckGrounded(out groundHit, 0.2f);
+            if (Mathf.Abs(Vector3.Angle(groundHit.normal, Vector3.up)) < 85f)
+            {
+                velocity = Vector3.ProjectOnPlane(velocity, groundHit.normal);
+            }
         }
 
         // update motion
@@ -149,8 +156,38 @@ public class Automaton : MonoBehaviour
         // update sub components
         m_anim.VisualUpdate(this);
     }
+
     public void LateUpdate()
     {
         m_anim.LateVisualUpdate();
+    }
+
+    private bool CheckGrounded(out RaycastHit groundHit, float distance)
+    {
+        bool grounded = false;
+        groundHit = default;
+
+        // sample walkable surfaces under capsule
+        Vector3 footSphereLocal = m_collider.center + ((m_collider.height / 2f) - m_collider.radius) * Vector3.down;
+        Vector3 footSphere = transform.TransformPoint(footSphereLocal);
+        float radius = m_collider.radius * 0.99f;
+        float dist = (m_collider.radius * 0.01f) + distance;
+        int hitCount = Physics.SphereCastNonAlloc(footSphere, radius, Vector3.down, m_hits, dist, m_groundLayers, QueryTriggerInteraction.Ignore);
+
+        // find flattest surface
+        float bestGroundNormal = 0;
+        for (int i = 0; i < hitCount; i++)
+        {
+            RaycastHit hit = m_hits[i];
+            float dot = Vector3.Dot(Vector3.up, hit.normal);
+            if (bestGroundNormal < dot)
+            {
+                bestGroundNormal = dot;
+                groundHit = hit;
+                grounded = true;
+            }
+        }
+
+        return grounded;
     }
 }
