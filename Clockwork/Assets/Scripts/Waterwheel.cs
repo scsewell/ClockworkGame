@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using XInputDotNetPure;
 
 public class Waterwheel : MonoBehaviour
 {
@@ -74,6 +75,8 @@ public class Waterwheel : MonoBehaviour
     private Sound m_upperSound;
     [SerializeField]
     private Sound m_upperShiftSound;
+    [SerializeField]
+    private AudioSource m_thunkSound;
 
     [Header("Bones")]
     [SerializeField] private Transform m_lowerShaft = null;
@@ -152,6 +155,7 @@ public class Waterwheel : MonoBehaviour
             {
                 m_lowerAngVelocity *= 0.2f;
                 m_upperGearConnected = true;
+                m_thunkSound.Play();
             }
             m_upperAngVelocity = m_lowerAngVelocity;
             m_upperRotation -= deltaAngle * 2.5f * Time.deltaTime;
@@ -183,11 +187,16 @@ public class Waterwheel : MonoBehaviour
         m_bridgeMiddle.position = m_bridgeMiddlePos.position;
 
         // set sound effects
-        float lowerVelocity = Mathf.Abs(m_lowerRaiseVelocity / 1.0f);
+        float lowerVelocity = Mathf.Abs(m_lowerRaiseVelocity * 3.0f);
+        float upperVelocity = Mathf.Abs(m_upperRaiseVelocity * 3.0f) + lowerVelocity;
         m_lowerShiftSound.SetIntensity(lowerVelocity);
-        m_upperShiftSound.SetIntensity(lowerVelocity + Mathf.Abs(m_upperRaiseVelocity / 1.0f));
+        m_upperShiftSound.SetIntensity(upperVelocity);
         m_lowerSound.SetIntensity(Mathf.Abs(m_lowerAngVelocity / m_rotationSpeed));
         m_upperSound.SetIntensity(Mathf.Abs(m_upperAngVelocity / m_rotationSpeed));
+
+        // contorller shake
+        float shake = Mathf.Abs(upperVelocity) / 6.5f;
+        GamePad.SetVibration(PlayerIndex.One, shake, shake);
 
         // set wake effects
         m_water.material.SetFloat("_Wake", waterFactor);

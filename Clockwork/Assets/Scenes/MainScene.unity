@@ -216,6 +216,12 @@ Transform:
   m_Father: {fileID: 677377660}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90}
+--- !u!4 &311471540 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4882988875594863418, guid: 90496c4da5124fa46908ae2fdb38e61a,
+    type: 3}
+  m_PrefabInstance: {fileID: 4811135842055811655}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &524144321
 GameObject:
   m_ObjectHideFlags: 3
@@ -268,16 +274,16 @@ MonoBehaviour:
   m_YDamping: 1
   m_ZDamping: 1
   m_ScreenX: 0.5
-  m_ScreenY: 0.65
+  m_ScreenY: 0.8
   m_CameraDistance: 9
   m_DeadZoneWidth: 0
-  m_DeadZoneHeight: 0.15
+  m_DeadZoneHeight: 0.1
   m_DeadZoneDepth: 0
   m_UnlimitedSoftZone: 0
   m_SoftZoneWidth: 0.75
   m_SoftZoneHeight: 0.45
   m_BiasX: 0
-  m_BiasY: 0
+  m_BiasY: 0.00000019868216
   m_GroupFramingMode: 2
   m_AdjustmentMode: 2
   m_GroupFramingSize: 0.8
@@ -5382,7 +5388,7 @@ MonoBehaviour:
   m_Priority: 10
   m_StandbyUpdate: 1
   m_LookAt: {fileID: 0}
-  m_Follow: {fileID: 4915981998754556040}
+  m_Follow: {fileID: 311471540}
   m_Lens:
     FieldOfView: 45
     OrthographicSize: 10
@@ -5408,7 +5414,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1322712187}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.021352412, y: 2.2078261, z: -9.001128}
+  m_LocalPosition: {x: 0, y: 2.2367535, z: -9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 524144322}
@@ -5554,7 +5560,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1584790839}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.7178714, z: -11}
+  m_LocalPosition: {x: 0, y: 2.2367535, z: -9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1875769447}
@@ -5826,9 +5832,3 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 90496c4da5124fa46908ae2fdb38e61a, type: 3}
---- !u!4 &4915981998754556040 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 4882988875594863410, guid: 90496c4da5124fa46908ae2fdb38e61a,
-    type: 3}
-  m_PrefabInstance: {fileID: 4811135842055811655}
-  m_PrefabAsset: {fileID: 0}
