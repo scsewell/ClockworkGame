@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using Framework.Volumes;
 
-public class LookAtVolume : Volume<ScriptableObject, LookAtVolume, LootAtVolumeManager>
+public class LookAtVolume : Volume<LookAtVolume, LootAtVolumeManager>
 {
     public Transform target = null;
 
@@ -15,6 +15,6 @@ public class LookAtVolume : Volume<ScriptableObject, LookAtVolume, LootAtVolumeM
 #endif
 }
 
-public class LootAtVolumeManager : VolumeManager<ScriptableObject, LookAtVolume, LootAtVolumeManager>
+public class LootAtVolumeManager : VolumeManager<LookAtVolume, LootAtVolumeManager>
 {
 }

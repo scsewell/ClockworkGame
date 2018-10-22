@@ -36,6 +36,45 @@ public class Waterwheel : MonoBehaviour
     [SerializeField]
     private float m_rotationAcceleration = 5.0f;
 
+    [System.Serializable]
+    public class Sound
+    {
+        public AudioSource[] sources = new AudioSource[0];
+
+        private float[] pitch;
+        private float[] volume;
+
+        public void Init()
+        {
+            pitch = new float[sources.Length];
+            volume = new float[sources.Length];
+
+            for (int i = 0; i < sources.Length; i++)
+            {
+                pitch[i] = sources[i].pitch;
+                volume[i] = sources[i].volume;
+            }
+        }
+
+        public void SetIntensity(float intensity)
+        {
+            for (int i = 0; i < sources.Length; i++)
+            {
+                sources[i].pitch = pitch[i] * intensity;
+                sources[i].volume = volume[i] * intensity;
+            }
+        }
+    }
+
+    [SerializeField]
+    private Sound m_lowerSound;
+    [SerializeField]
+    private Sound m_lowerShiftSound;
+    [SerializeField]
+    private Sound m_upperSound;
+    [SerializeField]
+    private Sound m_upperShiftSound;
+
     [Header("Bones")]
     [SerializeField] private Transform m_lowerShaft = null;
     [SerializeField] private Transform m_lowerShaftSlide = null;
@@ -67,8 +106,14 @@ public class Waterwheel : MonoBehaviour
     {
         m_lowerRaise = lowerRaiseTarget;
         m_upperRaise = upperRaiseTarget;
+
         m_initialYLower = m_lowerShaft.position.y;
         m_initialYUpper = m_upperShaft.position.y;
+
+        m_lowerSound.Init();
+        m_upperSound.Init();
+        m_lowerShiftSound.Init();
+        m_upperShiftSound.Init();
     }
 
     private void FixedUpdate()
@@ -136,6 +181,13 @@ public class Waterwheel : MonoBehaviour
         m_middleGear.rotation = middleRot;
 
         m_bridgeMiddle.position = m_bridgeMiddlePos.position;
+
+        // set sound effects
+        float lowerVelocity = Mathf.Abs(m_lowerRaiseVelocity / 1.0f);
+        m_lowerShiftSound.SetIntensity(lowerVelocity);
+        m_upperShiftSound.SetIntensity(lowerVelocity + Mathf.Abs(m_upperRaiseVelocity / 1.0f));
+        m_lowerSound.SetIntensity(Mathf.Abs(m_lowerAngVelocity / m_rotationSpeed));
+        m_upperSound.SetIntensity(Mathf.Abs(m_upperAngVelocity / m_rotationSpeed));
 
         // set wake effects
         m_water.material.SetFloat("_Wake", waterFactor);
