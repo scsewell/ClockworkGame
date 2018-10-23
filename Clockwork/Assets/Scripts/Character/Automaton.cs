@@ -120,10 +120,11 @@ public class Automaton : MonoBehaviour
         }
         else if (previouslyGrounded && !m_jumping)
         {
-            IsGrounded = CheckGrounded(out groundHit, 0.2f);
+            IsGrounded = CheckGrounded(out groundHit, 0.15f);
             if (Mathf.Abs(Vector3.Angle(groundHit.normal, Vector3.up)) < 85f)
             {
                 velocity = Vector3.ProjectOnPlane(velocity, groundHit.normal);
+                velocity.y -= 0.25f;
             }
         }
 
@@ -159,7 +160,7 @@ public class Automaton : MonoBehaviour
 
     public void LateUpdate()
     {
-        m_anim.LateVisualUpdate();
+        m_anim.LateVisualUpdate(this);
     }
 
     private bool CheckGrounded(out RaycastHit groundHit, float distance)

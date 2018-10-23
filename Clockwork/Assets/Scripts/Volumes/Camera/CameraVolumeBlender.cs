@@ -21,6 +21,7 @@ public class CameraVolumeBlender : VolumeBlender
             {
                 var profileBlend = profiles[i];
                 var volume = profileBlend.volume;
+                var weight = profileBlend.weight;
                 var virCam = volume.target;
                 
                 if (i == 0)
@@ -33,11 +34,11 @@ public class CameraVolumeBlender : VolumeBlender
                 }
                 else
                 {
-                    transform.position = Vector3.Lerp(transform.position, virCam.transform.position, profileBlend.weight);
-                    transform.rotation = Quaternion.Slerp(transform.rotation, virCam.transform.rotation, profileBlend.weight);
-                    m_cam.fieldOfView = Mathf.Lerp(m_cam.fieldOfView, virCam.m_Lens.FieldOfView, profileBlend.weight);
-                    m_cam.nearClipPlane = Mathf.Lerp(m_cam.nearClipPlane, virCam.m_Lens.NearClipPlane, profileBlend.weight);
-                    m_cam.farClipPlane = Mathf.Lerp(m_cam.farClipPlane, virCam.m_Lens.FarClipPlane, profileBlend.weight);
+                    transform.position = Vector3.Lerp(transform.position, virCam.transform.position, weight);
+                    transform.rotation = Quaternion.Slerp(transform.rotation, virCam.transform.rotation, weight);
+                    m_cam.fieldOfView = Mathf.Lerp(m_cam.fieldOfView, virCam.m_Lens.FieldOfView, weight);
+                    m_cam.nearClipPlane = Mathf.Lerp(m_cam.nearClipPlane, virCam.m_Lens.NearClipPlane, weight);
+                    m_cam.farClipPlane = Mathf.Lerp(m_cam.farClipPlane, virCam.m_Lens.FarClipPlane, weight);
                 }
             }
         }

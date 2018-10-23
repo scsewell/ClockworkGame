@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using Framework;
 
 public class CharacterAnimation : MonoBehaviour
@@ -11,7 +12,7 @@ public class CharacterAnimation : MonoBehaviour
     [Range(0, 20)]
     private float m_runAnimationSpeed = 6.24f;
     
-    [System.Serializable]
+    [Serializable]
     private class LookAtBone
     {
         public Transform transform = null;
@@ -43,7 +44,10 @@ public class CharacterAnimation : MonoBehaviour
     private void Awake()
     {
         m_anim = GetComponent<Animator>();
+
+        // Get constraints and sort by update order
         m_contraints = GetComponentsInChildren<IRigConstraint>(true);
+        Array.Sort(m_contraints, (a, b) => a.UpdateOrder.CompareTo(b.UpdateOrder));
         
         foreach (LookAtBone bone in m_headLook)
         {
@@ -68,11 +72,11 @@ public class CharacterAnimation : MonoBehaviour
         m_anim.SetBool("Grounded", automaton.IsGrounded);
     }
 
-    public void LateVisualUpdate()
+    public void LateVisualUpdate(Automaton automaton)
     {
         m_lookAtWeight = Mathf.Lerp(m_lookAtWeight, LookAtWeight, Time.deltaTime / 0.2f);
         LookAt(m_headLook, LookAtTarget, m_lookAtWeight);
-
+        
         for (int i = 0; i < m_contraints.Length; i++)
         {
             m_contraints[i].UpdateConstraint();
