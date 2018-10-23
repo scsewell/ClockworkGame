@@ -3,15 +3,6 @@
 public class LegIK : TwoBoneIK
 {
     [SerializeField]
-    private Transform m_thigh;
-    [SerializeField]
-    private Transform m_shin;
-    [SerializeField]
-    private Transform m_foot;
-    [SerializeField]
-    private Transform m_toe;
-
-    [SerializeField]
     private LayerMask m_groundLayers = Physics.DefaultRaycastLayers;
 
     [SerializeField]
@@ -27,10 +18,22 @@ public class LegIK : TwoBoneIK
     [SerializeField]
     private string m_weightCurveName = string.Empty;
 
+    [Header("Bones")]
+    
+    [SerializeField]
+    private Bone m_thigh;
+    [SerializeField]
+    private Bone m_shin;
+    [SerializeField]
+    private Bone m_foot;
+    [SerializeField]
+    private Bone m_toe;
+
     private Animator m_anim;
     private readonly RaycastHit[] m_hits = new RaycastHit[10];
     private RaycastHit m_footHit;
     private bool m_hasFootHit = false;
+    private Vector3 m_normal = Vector3.up;
 
     private void Awake()
     {
@@ -52,9 +55,9 @@ public class LegIK : TwoBoneIK
         
         // find all ground under the foot
         Vector3 searchDir = Vector3.down;
-        float searchHeight = Vector2.Distance(m_thigh.position, m_shin.position) + Vector2.Distance(m_shin.position, m_foot.position);
-        Vector3 searchPos = m_foot.position - ((searchHeight + m_radius) * searchDir);
-        float searchDistance = searchHeight + m_footHeight;
+        float searchHeight = Vector2.Distance(m_thigh.transform.position, m_shin.transform.position) + Vector2.Distance(m_shin.transform.position, m_foot.transform.position);
+        Vector3 searchPos = m_foot.transform.position - ((searchHeight + m_radius) * searchDir);
+        float searchDistance = searchHeight + m_footHeight + m_freeDistance;
 
 #if UNITY_EDITOR
         if (m_debug)
@@ -83,6 +86,10 @@ public class LegIK : TwoBoneIK
             }
         }
 
+        // smoothly blend the the normal used for foot placement towards the ground normal
+        //m_normal = Vector3.Lerp(m_normal, m_hasFootHit ? m_footHit.normal : Vector3.zero, Time.deltaTime * 8.0f);
+        m_normal = m_footHit.normal;
+
         // only use IK if near the ground
         if (m_hasFootHit)
         {
@@ -101,18 +108,16 @@ public class LegIK : TwoBoneIK
 
             // Even if IK is not requested by the animation, check if the foot is passing though the floor.
             // If so, force IK to prevent that.
-            bool forceIK = Vector3.Dot(m_foot.position - m_footHit.point, m_footHit.normal) < m_footHeight;
+            bool forceIK = Vector3.Dot(m_foot.transform.position - m_footHit.point, m_normal) < m_footHeight;
             float targetWeight = forceIK ? 1f : animWeight;
             Weight = Mathf.MoveTowards(Weight, targetWeight, Time.deltaTime * 15.0f);
             
             // Apply the IK contraint
-            Vector3 targetPos = m_footHit.point + (m_footHeight * m_footHit.normal);
-            Quaternion targetRot = Quaternion.LookRotation(m_footHit.normal, m_foot.up) * Quaternion.Euler(0, -135f, 0);
+            Vector3 targetPos = m_footHit.point + (m_footHeight * m_normal);
+            Quaternion targetRot = Quaternion.LookRotation(m_normal, m_foot.transform.up) * Quaternion.Euler(0, -135f, 0);
 
-            if (DoIK(m_thigh, m_shin, m_foot, targetPos, targetRot))
-            {
-                m_toe.localRotation = Quaternion.Slerp(m_toe.localRotation, Quaternion.Euler(0f, -225f, -180f), Weight);
-            }
+            DoIK(m_thigh, m_shin, m_foot, targetPos, targetRot);
+            m_toe.transform.localRotation = Quaternion.Slerp(m_toe.transform.localRotation, Quaternion.Euler(0f, -225f, -180f), Weight);
         }
     }
 }

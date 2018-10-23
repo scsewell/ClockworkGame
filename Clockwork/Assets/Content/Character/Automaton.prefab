@@ -1424,11 +1424,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_debug: 1
-  m_weight: 1
-  m_upperArm: {fileID: 4882988875594863390}
-  m_forearm: {fileID: 4882988875594863452}
-  m_hand: {fileID: 4882988875594863442}
-  target: {fileID: 0}
+  m_freeDistance: 0.065
+  m_maxAngle: 170
+  m_weight: 0
+  m_target: {fileID: 0}
+  m_upperArm:
+    transform: {fileID: 4882988875594863390}
+    m_lookAtAxis: 0
+    m_lookAtRotationOffset: {x: 0, y: 0, z: 0}
+    lastPosition: {x: 0, y: 0, z: 0}
+    lastRotation: {x: 0, y: 0, z: 0}
+  m_forearm:
+    transform: {fileID: 4882988875594863452}
+    m_lookAtAxis: 0
+    m_lookAtRotationOffset: {x: 0, y: 0, z: 0}
+    lastPosition: {x: 0, y: 0, z: 0}
+    lastRotation: {x: 0, y: 0, z: 0}
+  m_hand:
+    transform: {fileID: 4882988875594863442}
+    m_lookAtAxis: 0
+    m_lookAtRotationOffset: {x: 0, y: 0, z: 0}
+    lastPosition: {x: 0, y: 0, z: 0}
+    lastRotation: {x: 0, y: 0, z: 0}
 --- !u!1 &4882988875594829492
 GameObject:
   m_ObjectHideFlags: 0
@@ -1808,11 +1825,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_debug: 1
-  m_weight: 1
-  m_upperArm: {fileID: 4882988875594863316}
-  m_forearm: {fileID: 4882988875594863256}
-  m_hand: {fileID: 4882988875594863330}
-  target: {fileID: 0}
+  m_freeDistance: 0.065
+  m_maxAngle: 170
+  m_weight: 0
+  m_target: {fileID: 0}
+  m_upperArm:
+    transform: {fileID: 4882988875594863316}
+    m_lookAtAxis: 0
+    m_lookAtRotationOffset: {x: 0, y: 0, z: 0}
+    lastPosition: {x: 0, y: 0, z: 0}
+    lastRotation: {x: 0, y: 0, z: 0}
+  m_forearm:
+    transform: {fileID: 4882988875594863256}
+    m_lookAtAxis: 0
+    m_lookAtRotationOffset: {x: 0, y: 0, z: 0}
+    lastPosition: {x: 0, y: 0, z: 0}
+    lastRotation: {x: 0, y: 0, z: 0}
+  m_hand:
+    transform: {fileID: 4882988875594863330}
+    m_lookAtAxis: 0
+    m_lookAtRotationOffset: {x: 0, y: 0, z: 0}
+    lastPosition: {x: 0, y: 0, z: 0}
+    lastRotation: {x: 0, y: 0, z: 0}
 --- !u!1 &4882988875594829508
 GameObject:
   m_ObjectHideFlags: 0
@@ -2089,7 +2123,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4882988875594829520}
-  m_LocalRotation: {x: -0.44284025, y: -0.558506, z: 0.43577883, w: 0.54960024}
+  m_LocalRotation: {x: 0.52398974, y: -0.42978343, z: 0.4132824, w: -0.60820943}
   m_LocalPosition: {x: -0.26883483, y: 0.058392916, z: 0.019196201}
   m_LocalScale: {x: 0.9999999, y: 0.99999994, z: 0.9999999}
   m_Children: []
@@ -2108,7 +2142,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f54aa0207b5e6b44a728c18aa9b7a48, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_target: {fileID: 4882988875594863344}
+  m_target: {fileID: 4882988875594863348}
 --- !u!1 &4882988875594829522
 GameObject:
   m_ObjectHideFlags: 0
@@ -2749,7 +2783,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4882988875594829550}
-  m_LocalRotation: {x: -0.2845988, y: 0.014410545, z: 0.95729905, w: 0.04872943}
+  m_LocalRotation: {x: -0.28459984, y: 0.014390659, z: 0.9572993, w: 0.048723504}
   m_LocalPosition: {x: -0.04354675, y: -0.01971738, z: 0.0044208444}
   m_LocalScale: {x: 0.99999994, y: 1, z: 0.9999998}
   m_Children: []
@@ -2837,7 +2871,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4882988875594829554}
-  m_LocalRotation: {x: -0.004211362, y: -0.09619141, z: -0.04443326, w: 0.9943617}
+  m_LocalRotation: {x: -0.0041960333, y: -0.09619216, z: -0.04443176, w: 0.99436176}
   m_LocalPosition: {x: -0.019257259, y: -0.028208863, z: -0.01365426}
   m_LocalScale: {x: 0.99999994, y: 1, z: 1.0000001}
   m_Children: []
@@ -3137,11 +3171,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_debug: 1
+  m_freeDistance: 0.1
+  m_maxAngle: 175
   m_weight: 1
-  m_thigh: {fileID: 4882988875594863326}
-  m_shin: {fileID: 4882988875594863322}
-  m_foot: {fileID: 4882988875594863258}
-  m_toe: {fileID: 4882988875594863318}
   m_groundLayers:
     serializedVersion: 2
     m_Bits: 2048
@@ -3149,6 +3181,30 @@ MonoBehaviour:
   m_radius: 0.1
   m_maxSlope: 45
   m_weightCurveName: IK_Foot_R
+  m_thigh:
+    transform: {fileID: 4882988875594863326}
+    m_lookAtAxis: 0
+    m_lookAtRotationOffset: {x: 0, y: 0, z: 0}
+    lastPosition: {x: 0, y: 0, z: 0}
+    lastRotation: {x: 0, y: 0, z: 0}
+  m_shin:
+    transform: {fileID: 4882988875594863322}
+    m_lookAtAxis: 0
+    m_lookAtRotationOffset: {x: 0, y: 0, z: 0}
+    lastPosition: {x: 0, y: 0, z: 0}
+    lastRotation: {x: 0, y: 0, z: 0}
+  m_foot:
+    transform: {fileID: 4882988875594863258}
+    m_lookAtAxis: 0
+    m_lookAtRotationOffset: {x: 0, y: 0, z: 0}
+    lastPosition: {x: 0, y: 0, z: 0}
+    lastRotation: {x: 0, y: 0, z: 0}
+  m_toe:
+    transform: {fileID: 4882988875594863318}
+    m_lookAtAxis: 0
+    m_lookAtRotationOffset: {x: 0, y: 0, z: 0}
+    lastPosition: {x: 0, y: 0, z: 0}
+    lastRotation: {x: 0, y: 0, z: 0}
 --- !u!1 &4882988875594829564
 GameObject:
   m_ObjectHideFlags: 0
@@ -3333,11 +3389,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_debug: 1
+  m_freeDistance: 0.1
+  m_maxAngle: 175
   m_weight: 1
-  m_thigh: {fileID: 4882988875594863386}
-  m_shin: {fileID: 4882988875594863398}
-  m_foot: {fileID: 4882988875594863408}
-  m_toe: {fileID: 4882988875594863384}
   m_groundLayers:
     serializedVersion: 2
     m_Bits: 2048
@@ -3345,6 +3399,30 @@ MonoBehaviour:
   m_radius: 0.1
   m_maxSlope: 45
   m_weightCurveName: IK_Foot_L
+  m_thigh:
+    transform: {fileID: 4882988875594863386}
+    m_lookAtAxis: 0
+    m_lookAtRotationOffset: {x: 0, y: 0, z: 0}
+    lastPosition: {x: 0, y: 0, z: 0}
+    lastRotation: {x: 0, y: 0, z: 0}
+  m_shin:
+    transform: {fileID: 4882988875594863398}
+    m_lookAtAxis: 0
+    m_lookAtRotationOffset: {x: 0, y: 0, z: 0}
+    lastPosition: {x: 0, y: 0, z: 0}
+    lastRotation: {x: 0, y: 0, z: 0}
+  m_foot:
+    transform: {fileID: 4882988875594863408}
+    m_lookAtAxis: 0
+    m_lookAtRotationOffset: {x: 0, y: 0, z: 0}
+    lastPosition: {x: 0, y: 0, z: 0}
+    lastRotation: {x: 0, y: 0, z: 0}
+  m_toe:
+    transform: {fileID: 4882988875594863384}
+    m_lookAtAxis: 0
+    m_lookAtRotationOffset: {x: 0, y: 0, z: 0}
+    lastPosition: {x: 0, y: 0, z: 0}
+    lastRotation: {x: 0, y: 0, z: 0}
 --- !u!1 &4882988875594829586
 GameObject:
   m_ObjectHideFlags: 0

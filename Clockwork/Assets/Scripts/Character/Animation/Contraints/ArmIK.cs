@@ -3,40 +3,31 @@
 public class ArmIK : TwoBoneIK
 {
     [SerializeField]
-    private Transform m_upperArm;
-    [SerializeField]
-    private Transform m_forearm;
-    [SerializeField]
-    private Transform m_hand;
+    private Transform m_target = null;
 
-    public Transform target = null;
+    [Header("Bones")]
 
-    private Vector3 m_targetPosition;
-    private Quaternion m_targetRotation;
+    [SerializeField]
+    private Bone m_upperArm;
+    [SerializeField]
+    private Bone m_forearm;
+    [SerializeField]
+    private Bone m_hand;
+
+    /// <summary>
+    /// The goal of the IK contraint.
+    /// </summary>
+    public Transform Target
+    {
+        get { return m_target; }
+        set { m_target = value; }
+    }
 
     public override void UpdateConstraint()
     {
-        if (Weight > 0)
+        if (m_target != null && Weight > 0)
         {
-            if (target != null)
-            {
-                m_targetPosition = target.position;
-                m_targetRotation = target.rotation;
-            }
-
-            DoIK(m_upperArm, m_forearm, m_hand, m_targetPosition, m_targetRotation);
+            DoIK(m_upperArm, m_forearm, m_hand, m_target.position, m_target.rotation);
         }
-    }
-
-    public void SetTarget(Transform transform)
-    {
-        target = transform;
-    }
-
-    public void SetTarget(Vector3 position, Quaternion rotation)
-    {
-        m_targetPosition = position;
-        m_targetRotation = rotation;
-        target = null;
     }
 }
