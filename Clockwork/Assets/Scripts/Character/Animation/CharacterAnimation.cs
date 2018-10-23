@@ -48,7 +48,12 @@ public class CharacterAnimation : MonoBehaviour
         // Get constraints and sort by update order
         m_contraints = GetComponentsInChildren<IRigConstraint>(true);
         Array.Sort(m_contraints, (a, b) => a.UpdateOrder.CompareTo(b.UpdateOrder));
-        
+
+        for (int i = 0; i < m_contraints.Length; i++)
+        {
+            m_contraints[i].Initialize();
+        }
+
         foreach (LookAtBone bone in m_headLook)
         {
             bone.lastLookRotation = bone.transform.rotation;

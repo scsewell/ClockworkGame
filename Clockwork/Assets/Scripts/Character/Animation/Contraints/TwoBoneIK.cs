@@ -34,10 +34,36 @@ public abstract class TwoBoneIK : MonoBehaviour, IRigConstraint
     /// </summary>
     public int UpdateOrder => -1000;
 
+    public virtual void Initialize()
+    {
+    }
+
     /// <summary>
     /// Apply the IK constraint to the bones.
     /// </summary>
     public abstract void UpdateConstraint();
+
+    protected float GetMaxDistance(Bone bone1, Bone bone2, Bone bone3)
+    {
+        // get bone transforms
+        Vector3 p1 = bone1.Position;
+        Vector3 p2 = bone2.Position;
+        Vector3 p3 = bone3.Position;
+        
+        // get bone lengths
+        Vector3 a = p2 - p1;
+        Vector3 b = p3 - p2;
+
+        float a2 = a.sqrMagnitude;
+        float b2 = b.sqrMagnitude;
+
+        float aLen = Mathf.Sqrt(a2);
+        float bLen = Mathf.Sqrt(b2);
+
+        // find the maximum distance the IK chain can reach (Cosine Law)
+        float chainLength = Mathf.Sqrt(a2 + b2 - (2f * aLen * bLen * Mathf.Cos(m_maxAngle * Mathf.Deg2Rad)));
+        return chainLength + m_freeDistance;
+    }
 
     /// <summary>
     /// Conducts a two bone IK pass. If the goal is to far to be reached, the root bone may 
@@ -48,16 +74,17 @@ public abstract class TwoBoneIK : MonoBehaviour, IRigConstraint
     /// <param name="bone3">The bone to place at the target transform.</param>
     /// <param name="targetPos">The goal position.</param>
     /// <param name="targetRot">The goal rotation.</param>
-    protected void DoIK(Bone bone1, Bone bone2, Bone bone3, Vector3 targetPos, Quaternion targetRot)
+    /// <param name="weight">The strength of the IK constraint.</param>
+    protected void DoIK(Bone bone1, Bone bone2, Bone bone3, Vector3 targetPos, Quaternion targetRot, float weight)
     {
         // get bone transforms
-        Vector3 p1 = bone1.transform.position;
-        Vector3 p2 = bone2.transform.position;
-        Vector3 p3 = bone3.transform.position;
+        Vector3 p1 = bone1.Position;
+        Vector3 p2 = bone2.Position;
+        Vector3 p3 = bone3.Position;
 
-        Quaternion r1 = bone1.transform.rotation;
-        Quaternion r2 = bone2.transform.rotation;
-        Quaternion r3 = bone3.transform.rotation;
+        Quaternion r1 = bone1.Rotation;
+        Quaternion r2 = bone2.Rotation;
+        Quaternion r3 = bone3.Rotation;
 
         // get bone lengths
         Vector3 a = p2 - p1;
@@ -113,23 +140,23 @@ public abstract class TwoBoneIK : MonoBehaviour, IRigConstraint
         // compute new transforms
         Vector3 ik_p1 = p1 + offset;
         Vector3 ik_p2 = ik_p1 + v;
-
-        Quaternion iK_r1 = Quaternion.LookRotation(v, cross) * Quaternion.Euler(-180f, 90f, 0);
-        Quaternion ik_r2 = Quaternion.LookRotation(targetPos - ik_p2, cross) * Quaternion.Euler(-180f, 90f, 0);
+        
+        Quaternion iK_r1 = bone1.LookAt(v, cross);
+        Quaternion ik_r2 = bone2.LookAt(targetPos - ik_p2, cross);
 
         // blend IK by weight
-        p1 = Vector3.Lerp(p1, ik_p1, m_weight);
-        p2 = Vector3.Lerp(p2, ik_p2, m_weight);
-        p3 = Vector3.Lerp(p3, targetPos, m_weight);
+        p1 = Vector3.Lerp(p1, ik_p1, weight);
+        p2 = Vector3.Lerp(p2, ik_p2, weight);
+        p3 = Vector3.Lerp(p3, targetPos, weight);
 
-        r1 = Quaternion.Slerp(r1, iK_r1, m_weight);
-        r2 = Quaternion.Slerp(r2, ik_r2, m_weight);
-        r3 = Quaternion.Slerp(r3, targetRot, m_weight);
+        r1 = Quaternion.Slerp(r1, iK_r1, weight);
+        r2 = Quaternion.Slerp(r2, ik_r2, weight);
+        r3 = Quaternion.Slerp(r3, targetRot, weight);
 
         // update bones
-        bone1.transform.SetPositionAndRotation(p1, r1);
-        bone2.transform.SetPositionAndRotation(p2, r2);
-        bone3.transform.SetPositionAndRotation(p3, r3);
+        bone1.SetGoalTransform(p1, r1);
+        bone2.SetGoalTransform(p2, r2);
+        bone3.SetGoalTransform(p3, r3);
 
 #if UNITY_EDITOR
         if (m_debug)

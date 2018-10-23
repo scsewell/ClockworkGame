@@ -11,6 +11,10 @@ public class RigLookAt : MonoBehaviour, IRigConstraint
     /// </summary>
     public int UpdateOrder => 0;
 
+    public void Initialize()
+    {
+    }
+
     public void UpdateConstraint()
     {
         SetRotation();

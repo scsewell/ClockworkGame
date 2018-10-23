@@ -6,7 +6,12 @@
     int UpdateOrder { get; }
 
     /// <summary>
-    /// Updates the contrained bones.
+    /// initializes the contrainet.
+    /// </summary>
+    void Initialize();
+
+    /// <summary>
+    /// Updates the contraint.
     /// </summary>
     void UpdateConstraint();
 }
