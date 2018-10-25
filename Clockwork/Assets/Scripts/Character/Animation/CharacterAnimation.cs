@@ -1,17 +1,23 @@
 ﻿using System;
 using UnityEngine;
-using Framework;
 
 public class CharacterAnimation : MonoBehaviour
 {
     [SerializeField]
-    [Range(0, 20)]
+    [Tooltip("The disttance moved during one loop of the walk animation.")]
+    [Range(0f, 20f)]
     private float m_walkAnimationSpeed = 1.62f;
 
     [SerializeField]
-    [Range(0, 20)]
+    [Tooltip("The disttance moved during one loop of the run animation.")]
+    [Range(0f, 20f)]
     private float m_runAnimationSpeed = 6.24f;
-    
+
+    [SerializeField]
+    [Tooltip("The angle in degrees from the movement plane at which the pivot animations will start to play.")]
+    [Range(0f, 45f)]
+    private float m_pivotAngle = 20f;
+
     [Serializable]
     private class LookAtBone
     {
@@ -33,7 +39,8 @@ public class CharacterAnimation : MonoBehaviour
 
     [SerializeField]
     private LookAtBone[] m_headLook;
-    
+
+    private Movement m_movement;
     private Animator m_anim;
     private IRigConstraint[] m_contraints;
     private float m_lookAtWeight = 0f;
@@ -43,6 +50,7 @@ public class CharacterAnimation : MonoBehaviour
     
     private void Awake()
     {
+        m_movement = GetComponentInParent<Movement>();
         m_anim = GetComponent<Animator>();
 
         // Get constraints and sort by update order
@@ -60,24 +68,31 @@ public class CharacterAnimation : MonoBehaviour
         }
     }
 
-    public void VisualUpdate(Automaton automaton)
+    public void PreAnimationUpdate()
     {
-        Vector3 velocity = automaton.Velocity;
+        Vector3 velocity = m_movement.Velocity;
         float speedH = Mathf.Abs(velocity.x);
 
-        float walkRun = Mathf.InverseLerp(automaton.Ground.MinSpeed, m_runAnimationSpeed, speedH);
+        float walkRun = Mathf.InverseLerp(m_movement.Ground.MinSpeed, m_runAnimationSpeed, speedH);
         float walkRunSpeed = Mathf.LerpUnclamped(speedH / m_walkAnimationSpeed, speedH / m_runAnimationSpeed, walkRun);
 
-        float speedSmoothing = automaton.Ground.MaxSpeed * 4.0f;
-        SetFloatLerp("SpeedH", Vector3.Dot(velocity, automaton.transform.forward), speedSmoothing);
+        float speedSmoothing = m_movement.Ground.MaxSpeed * 4.0f;
+        SetFloatLerp("SpeedH", Vector3.Dot(velocity, m_movement.transform.forward), speedSmoothing);
         SetFloatLerp("SpeedV", velocity.y, speedSmoothing);
         SetFloatLerp("WalkRun", walkRun, 4.0f);
         SetFloatSmooth("WalkRunSpeed", walkRunSpeed, 4.0f);
         SetFloatSmooth("AirAnimSpeed", 0.25f + (0.05f * velocity.magnitude), 8.0f);
-        m_anim.SetBool("Grounded", automaton.IsGrounded);
+
+        float angVel = m_movement.AngularVelocity;
+        float angle = Mathf.Abs(Mathf.Asin(m_movement.transform.forward.z) * Mathf.Rad2Deg);
+        m_anim.SetBool("PivotLeft", angle > m_pivotAngle && angVel < 0);
+        m_anim.SetBool("PivotRight", angle > m_pivotAngle && angVel > 0);
+        m_anim.SetFloat("PivotAnimSpeed", Mathf.Abs(angVel) / 180);
+
+        m_anim.SetBool("Grounded", m_movement.IsGrounded);
     }
 
-    public void LateVisualUpdate(Automaton automaton)
+    public void PostAnimationUpdate()
     {
         m_lookAtWeight = Mathf.Lerp(m_lookAtWeight, LookAtWeight, Time.deltaTime / 0.2f);
         LookAt(m_headLook, LookAtTarget, m_lookAtWeight);
@@ -87,19 +102,7 @@ public class CharacterAnimation : MonoBehaviour
             m_contraints[i].UpdateConstraint();
         }
     }
-
-    public void PivotLeft()
-    {
-        m_anim.SetBool("PivotLeft", true);
-        this.DelayedCall(() => m_anim.SetBool("PivotLeft", false), 0.1f);
-    }
-
-    public void PivotRight()
-    {
-        m_anim.SetBool("PivotRight", true);
-        this.DelayedCall(() => m_anim.SetBool("PivotRight", false), 0.1f);
-    }
-
+    
     private void LookAt(LookAtBone[] bones, Transform target, float weight)
     {
         foreach (LookAtBone bone in m_headLook)

@@ -3,6 +3,8 @@ using Framework.Volumes;
 
 public class LookAtVolume : Volume<LookAtVolume, LootAtVolumeManager>
 {
+    [Header("Profile")]
+
     public Transform target = null;
 
 #if UNITY_EDITOR

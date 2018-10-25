@@ -3,6 +3,8 @@ using Framework.Volumes;
 
 public class DustVolume : Volume<DustVolume, DustVolumeManager>
 {
+    [Header("Profile")]
+
     [Range(0f, 1f)]
     public float strength = 0.1f;
     

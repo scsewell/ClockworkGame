@@ -22,7 +22,7 @@ public class CameraVolumeBlender : VolumeBlender
                 var profileBlend = profiles[i];
                 var volume = profileBlend.volume;
                 var weight = profileBlend.weight;
-                var virCam = volume.target;
+                var virCam = volume.cam;
                 
                 if (i == 0)
                 {
