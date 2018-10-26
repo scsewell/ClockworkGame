@@ -18,6 +18,10 @@ public class CharacterAnimation : MonoBehaviour
     [Range(0f, 45f)]
     private float m_pivotAngle = 20f;
 
+    [Header("Constraints")]
+    [SerializeField] private ArmIK m_leftArm;
+    [SerializeField] private ArmIK m_rightArm;
+
     [Serializable]
     private class LookAtBone
     {
@@ -40,6 +44,7 @@ public class CharacterAnimation : MonoBehaviour
     [SerializeField]
     private LookAtBone[] m_headLook;
 
+    private Interactor m_interactor;
     private Movement m_movement;
     private Animator m_anim;
     private IRigConstraint[] m_contraints;
@@ -47,9 +52,23 @@ public class CharacterAnimation : MonoBehaviour
 
     public Transform LookAtTarget { get; set; } = null;
     public float LookAtWeight { get; set; } = 0f;
-    
+
+    private readonly Vector3[] m_shoulderPositions = new Vector3[2];
+    public Vector3[] ShoulderPositions
+    {
+        get
+        {
+            m_shoulderPositions[0] = m_leftArm.ShoulderPosition;
+            m_shoulderPositions[1] = m_rightArm.ShoulderPosition;
+            return m_shoulderPositions;
+        }
+    }
+
+    public float ArmLength => Mathf.Max(m_leftArm.MaxReach, m_rightArm.MaxReach);
+
     private void Awake()
     {
+        m_interactor = GetComponentInParent<Interactor>();
         m_movement = GetComponentInParent<Movement>();
         m_anim = GetComponent<Animator>();
 
@@ -66,10 +85,32 @@ public class CharacterAnimation : MonoBehaviour
         {
             bone.lastLookRotation = bone.transform.rotation;
         }
+
+        m_interactor.InteractionStarted += OnInteractionStarted;
+        m_interactor.InteractionEnded += OnInteractionEnded;
     }
 
+    private void OnDestroy()
+    {
+        m_interactor.InteractionStarted -= OnInteractionStarted;
+        m_interactor.InteractionEnded -= OnInteractionEnded;
+    }
+
+    private void OnInteractionStarted(IInteractable interactable)
+    {
+        m_leftArm.Target = m_interactor.GetFreeHandAnchorByDistance(m_leftArm.ShoulderPosition);
+        m_rightArm.Target = m_interactor.GetFreeHandAnchorByDistance(m_rightArm.ShoulderPosition);
+    }
+
+    private void OnInteractionEnded(IInteractable interactable)
+    {
+        m_leftArm.Target = null;
+        m_rightArm.Target = null;
+    }
+    
     public void PreAnimationUpdate()
     {
+        // set animator properties
         Vector3 velocity = m_movement.Velocity;
         float speedH = Mathf.Abs(velocity.x);
 
@@ -94,6 +135,7 @@ public class CharacterAnimation : MonoBehaviour
 
     public void PostAnimationUpdate()
     {
+        // Update constraints
         m_lookAtWeight = Mathf.Lerp(m_lookAtWeight, LookAtWeight, Time.deltaTime / 0.2f);
         LookAt(m_headLook, LookAtTarget, m_lookAtWeight);
         

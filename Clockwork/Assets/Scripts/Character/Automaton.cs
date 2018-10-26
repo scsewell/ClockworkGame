@@ -23,21 +23,27 @@ public class Automaton : MonoBehaviour
         bool jump = Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.Joystick1Button0);
         bool interact = Input.GetKey(KeyCode.Joystick1Button1);
 
-        PlayerInput input = new PlayerInput(moveH, jump, interact);
-
         // check for interaction
-        //Interactor interator = GetComponent<Interactor>();
-        //if (Input.GetKey(KeyCode.Joystick1Button1))
-        //{
-        //    if (!interator.IsInteracting)
-        //    {
-        //        interator.StartInteraction();
-        //    }
-        //}
-        //else if (interator.IsInteracting)
-        //{
-        //    interator.EndInteraction();
-        //}
+        Interactor interator = GetComponent<Interactor>();
+        if (Input.GetKey(KeyCode.RightControl) || Input.GetKey(KeyCode.Joystick1Button2))
+        {
+            if (!interator.IsInteracting)
+            {
+                interator.StartInteraction(m_anim.ArmLength, m_anim.ShoulderPositions);
+            }
+        }
+        else if (interator.IsInteracting)
+        {
+            interator.EndInteraction();
+        }
+
+        if (interator.IsInteracting && !interator.CurrentInteration.AllowMovement)
+        {
+            moveH = 0;
+            jump = false;
+        }
+
+        PlayerInput input = new PlayerInput(moveH, jump, interact);
 
         // update sub components
         m_movement.SetInputs(input);

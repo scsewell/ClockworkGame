@@ -53,6 +53,8 @@ public class LegIK : TwoBoneIK
     private float m_blend = 0;
     private float m_blendOut = 0;
 
+    public override float MaxReach => GetMaxDistance(m_thigh, m_shin, m_foot);
+
     public override void Initialize()
     {
         m_anim = GetComponentInParent<Animator>();

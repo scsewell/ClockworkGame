@@ -11,6 +11,11 @@ public interface IInteractable
     List<HandAnchor> HandAnchors { get; }
 
     /// <summary>
+    /// Should interactors be allowed to move while interacting with this.
+    /// </summary>
+    bool AllowMovement { get; }
+
+    /// <summary>
     /// Called when an interactor starts an interaction.
     /// </summary>
     /// <param name="source">The source that initiated the interaction.</param>

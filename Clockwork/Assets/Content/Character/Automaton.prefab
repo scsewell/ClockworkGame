@@ -2685,7 +2685,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4882988875594829546}
-  m_LocalRotation: {x: -0.00957488, y: 0.09682029, z: -0.04362961, w: -0.99429905}
+  m_LocalRotation: {x: -0.009578895, y: 0.09682021, z: -0.043630008, w: -0.99429905}
   m_LocalPosition: {x: -0.019263051, y: 0.028579775, z: -0.01352224}
   m_LocalScale: {x: 1, y: 0.99999994, z: 1.0000001}
   m_Children: []
@@ -2861,7 +2861,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4882988875594829554}
-  m_LocalRotation: {x: -0.009658355, y: -0.0959466, z: -0.044959493, w: 0.9943237}
+  m_LocalRotation: {x: -0.009654472, y: -0.09594686, z: -0.0449591, w: 0.9943238}
   m_LocalPosition: {x: -0.019257259, y: -0.028208863, z: -0.01365426}
   m_LocalScale: {x: 0.99999994, y: 1, z: 1.0000001}
   m_Children: []
@@ -2949,7 +2949,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4882988875594829558}
-  m_LocalRotation: {x: -0.28578255, y: -0.004181146, z: 0.9571376, w: -0.046889536}
+  m_LocalRotation: {x: -0.28578252, y: -0.004183068, z: 0.95713747, w: -0.04689024}
   m_LocalPosition: {x: -0.043492015, y: 0.01913771, z: 0.004358024}
   m_LocalScale: {x: 0.9999998, y: 1, z: 0.99999976}
   m_Children: []
@@ -3558,6 +3558,7 @@ GameObject:
   - component: {fileID: 2556245933066425436}
   - component: {fileID: 4882988875604229338}
   - component: {fileID: 3452623470783426453}
+  - component: {fileID: 8846065646882927693}
   - component: {fileID: 4670785880292077479}
   - component: {fileID: 6953745216761794359}
   - component: {fileID: 963867107380994293}
@@ -3647,6 +3648,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3169a7f027303954d9e5aff64ecabbd0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &8846065646882927693
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4882988875594829594}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a8ac00946193ed41967443ce657e329, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &4670785880292077479
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3690,6 +3703,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_walkAnimationSpeed: 1.62
   m_runAnimationSpeed: 6.24
+  m_pivotAngle: 20
+  m_leftArm: {fileID: 5160511117644540028}
+  m_rightArm: {fileID: 8235874679047363855}
   m_headLook:
   - transform: {fileID: 4882988875594863410}
     weight: 0.35

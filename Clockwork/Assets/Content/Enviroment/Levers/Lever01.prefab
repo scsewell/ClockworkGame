@@ -200,6 +200,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a77c0e3bc60fef14a9ac9fd16d182eaf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_handAnchors:
+  - m_transform: {fileID: 4993253767351995638}
+    m_rotateMode: 1
+    m_handShape: 0
+    occupied: 0
+  m_handle: {fileID: 6732567914789359882}
+  m_traversalAxis: {x: 0, y: 0, z: -1}
+  m_traversalArc: 30
+  m_traversalTime: 0.25
+  m_isVertical: 0
 --- !u!1 &8911997874584157206
 GameObject:
   m_ObjectHideFlags: 0

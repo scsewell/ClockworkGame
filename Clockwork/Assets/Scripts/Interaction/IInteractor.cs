@@ -14,7 +14,9 @@
     /// The name of the interactor.
     /// </summary>
     string Name { get; }
-
-    void StartInteraction();
+    
+    /// <summary>
+    /// Ends the current interaction if interacting.
+    /// </summary>
     void EndInteraction();
 }

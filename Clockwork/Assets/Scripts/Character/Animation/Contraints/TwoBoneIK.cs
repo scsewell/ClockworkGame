@@ -34,6 +34,11 @@ public abstract class TwoBoneIK : MonoBehaviour, IRigConstraint
     /// </summary>
     public int UpdateOrder => -1000;
 
+    /// <summary>
+    /// The maximum distance the IK chain can reach.
+    /// </summary>
+    public abstract float MaxReach { get; }
+
     public virtual void Initialize()
     {
     }

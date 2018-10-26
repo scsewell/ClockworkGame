@@ -4,16 +4,19 @@ using XInputDotNetPure;
 public class Waterwheel : MonoBehaviour
 {
     [SerializeField]
+    private Lever m_lowerLever = null;
+    [SerializeField]
+    private Lever m_upperLever = null;
+
+    [SerializeField]
+    [Range(0f, 2f)]
+    private float m_raiseSpeed = 0.25f;
+
+    [SerializeField]
     private Renderer m_water = null;
     [SerializeField]
     private ParticleSystem m_mist = null;
-
-    [Range(0, 1)]
-    public float lowerRaiseTarget = 1.0f;
-
-    [Range(0, 1)]
-    public float upperRaiseTarget = 0.0f;
-
+    
     [SerializeField]
     private float m_raisedHeight = 2.0f;
     [SerializeField]
@@ -93,22 +96,24 @@ public class Waterwheel : MonoBehaviour
     [SerializeField] private Transform m_bridgeRight01 = null;
     [SerializeField] private Transform m_bridgeRight02 = null;
 
+    private float m_lowerRaise;
+    private float m_upperRaise;
+    private float m_lowerRaiseTarget = 1.0f;
+    private float m_upperRaiseTarget = 1.0f;
     private float m_initialYLower;
     private float m_initialYUpper;
     private float m_lowerRotation = 0f;
     private float m_upperRotation = 0f;
     private float m_lowerAngVelocity = 0f;
     private float m_upperAngVelocity = 0f;
-    private float m_lowerRaise;
-    private float m_upperRaise;
     private float m_lowerRaiseVelocity = 0f;
     private float m_upperRaiseVelocity = 0f;
     private bool m_upperGearConnected = true;
 
     private void Awake()
     {
-        m_lowerRaise = lowerRaiseTarget;
-        m_upperRaise = upperRaiseTarget;
+        m_lowerRaise = m_lowerRaiseTarget;
+        m_upperRaise = m_upperRaiseTarget;
 
         m_initialYLower = m_lowerShaft.position.y;
         m_initialYUpper = m_upperShaft.position.y;
@@ -121,12 +126,19 @@ public class Waterwheel : MonoBehaviour
 
     private void FixedUpdate()
     {
-        SetVelocity(ref m_lowerRaiseVelocity, m_lowerRaise, lowerRaiseTarget);
-        SetVelocity(ref m_upperRaiseVelocity, m_upperRaise, upperRaiseTarget);
+        SetVelocity(ref m_lowerRaiseVelocity, m_lowerRaise, m_lowerRaiseTarget);
+        SetVelocity(ref m_upperRaiseVelocity, m_upperRaise, m_upperRaiseTarget);
     }
 
     private void LateUpdate()
     {
+        float oldlowerRaiseTarget = m_lowerRaiseTarget;
+        float oldUpperRaiseTarget = m_upperRaiseTarget;
+
+        // Set target
+        m_lowerRaiseTarget = Mathf.Clamp01(m_lowerRaiseTarget + (m_raiseSpeed * m_lowerLever.Value * Time.deltaTime));
+        m_upperRaiseTarget = Mathf.Clamp01(m_upperRaiseTarget + (m_raiseSpeed * m_upperLever.Value * Time.deltaTime));
+
         // move lower shaft
         m_lowerRaise += m_lowerRaiseVelocity * Time.deltaTime;
         
@@ -155,6 +167,7 @@ public class Waterwheel : MonoBehaviour
             {
                 m_lowerAngVelocity *= 0.2f;
                 m_upperGearConnected = true;
+                m_thunkSound.pitch = Random.Range(0.85f, 1.15f);
                 m_thunkSound.Play();
             }
             m_upperAngVelocity = m_lowerAngVelocity;
@@ -187,6 +200,14 @@ public class Waterwheel : MonoBehaviour
         m_bridgeMiddle.position = m_bridgeMiddlePos.position;
 
         // set sound effects
+        if ((oldlowerRaiseTarget > 0f && m_lowerRaiseTarget == 0f) ||
+            (oldUpperRaiseTarget > 0f && m_upperRaiseTarget == 0f) ||
+            (oldlowerRaiseTarget < 1f && m_lowerRaiseTarget == 1f) ||
+            (oldUpperRaiseTarget < 1f && m_upperRaiseTarget == 1f))
+        {
+            m_thunkSound.PlayOneShot(m_thunkSound.clip);
+        }
+
         float lowerVelocity = Mathf.Abs(m_lowerRaiseVelocity * 3.0f);
         float upperVelocity = Mathf.Abs(m_upperRaiseVelocity * 3.0f) + lowerVelocity;
         m_lowerShiftSound.SetIntensity(lowerVelocity);

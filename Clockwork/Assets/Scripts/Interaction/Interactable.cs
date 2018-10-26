@@ -18,6 +18,11 @@ public abstract class Interactable : MonoBehaviour, IInteractable
     /// </summary>
     public bool IsInteracting => CurrentInteractor != null;
 
+    /// <summary>
+    /// Should interactors be allowed to move while interacting with this.
+    /// </summary>
+    public virtual bool AllowMovement { get; } = true;
+
     protected virtual void OnEnable()
     {
         InteractionManager.Instance.Register(this);
