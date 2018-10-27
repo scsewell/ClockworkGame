@@ -3,29 +3,44 @@ using UnityEngine;
 
 public class RigLookAtConstraint : MonoBehaviour, IConstraint
 {
+    [SerializeField]
+    [Tooltip("The time in seconds over which the bones smoothly switch to a new target.")]
+    [Range(0f, 2f)]
+    private float m_blendDuration = 0.2f;
+
     [Serializable]
-    private class LookAtBone
+    public class LookAtBone : Bone
     {
-        public Transform transform = null;
+        [Tooltip("The strength of the look at effect on this bone.")]
         [Range(0f, 1f)]
         public float weight = 1.0f;
+
+        [Tooltip("The maximum angle in degrees the bone may look away from the animated rotation.")]
         [Range(0f, 179f)]
         public float clampAngle = 45.0f;
-        [Range(0.01f, 1f)]
-        public float smoothing = 0.125f;
-
-        [HideInInspector]
-        public float lastDirWeight = 0f;
-        [HideInInspector]
-        public Quaternion lastLookRotation = Quaternion.identity;
     }
     
     [SerializeField]
     private LookAtBone[] m_bones;
     
+    private Transform m_target = null;
+    private bool m_targetChanged = false;
     private float m_weight = 0f;
+    private float m_oldTargetBlend = 0;
 
-    public Transform Target { get; set; } = null;
+    public Transform Target
+    {
+        get { return m_target; }
+        set
+        {
+            if (m_target != value)
+            {
+                m_target = value;
+                m_targetChanged = true;
+            }
+        }
+    }
+
     public float Weight { get; set; } = 1f;
 
     public int UpdateOrder => -2000;
@@ -34,13 +49,24 @@ public class RigLookAtConstraint : MonoBehaviour, IConstraint
     {
         foreach (LookAtBone bone in m_bones)
         {
-            bone.lastLookRotation = bone.transform.rotation;
+            bone.StoreBlendTransform();
         }
     }
 
     public void UpdateConstraint()
     {
         m_weight = Mathf.Lerp(m_weight, Weight, Time.deltaTime / 0.2f);
+
+        if (m_targetChanged)
+        {
+            // Remember the transform looking at the previous target
+            foreach (Bone bone in m_bones)
+            {
+                bone.StoreBlendTransform();
+            }
+            m_oldTargetBlend = 1f;
+            m_targetChanged = false;
+        }
 
         foreach (LookAtBone bone in m_bones)
         {
@@ -59,12 +85,21 @@ public class RigLookAtConstraint : MonoBehaviour, IConstraint
                 Vector3 clampedDir = Quaternion.AngleAxis(clampedAngle, lookCross.normalized) * t.forward;
 
                 dirWeight = 1f - Mathf.Clamp01(Mathf.InverseLerp(bone.clampAngle, 180f, Mathf.Abs(angle)));
-                lookRotation = Quaternion.LookRotation(clampedDir, -t.right) * Quaternion.Euler(0, 0, -90);
+                lookRotation = bone.LookAt(clampedDir);
             }
+            
+            // apply the look at rotation offset
+            t.rotation = Quaternion.Slerp(t.rotation, lookRotation, m_weight * bone.weight * dirWeight);
+        }
 
-            bone.lastDirWeight = Mathf.MoveTowards(bone.lastDirWeight, dirWeight, Time.deltaTime / (2f * bone.smoothing));
-            bone.lastLookRotation = Quaternion.Slerp(bone.lastLookRotation, lookRotation, Time.deltaTime / bone.smoothing);
-            t.rotation = Quaternion.Slerp(t.rotation, bone.lastLookRotation, m_weight * bone.weight * bone.lastDirWeight);
+        // blend from the previous transforms for smooth target swtiches
+        m_oldTargetBlend = Mathf.MoveTowards(m_oldTargetBlend, 0f, Time.deltaTime / m_blendDuration);
+        float oldTargetBlend = Mathf.SmoothStep(0f, 1f, m_oldTargetBlend);
+
+        foreach (Bone bone in m_bones)
+        {
+            bone.ApplyBlendTransform(oldTargetBlend);
+            bone.StoreLastTransform();
         }
     }
 }

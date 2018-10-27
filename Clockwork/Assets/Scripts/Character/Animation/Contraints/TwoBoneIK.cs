@@ -48,6 +48,12 @@ public abstract class TwoBoneIK : MonoBehaviour, IConstraint
     /// </summary>
     public abstract void UpdateConstraint();
 
+    /// <summary>
+    /// Computes the maximum distance the IK chain is allowed to reach.
+    /// </summary>
+    /// <param name="bone1">The root bone in the IK chain.</param>
+    /// <param name="bone2">The second bone in the IK chain.</param>
+    /// <param name="bone3">The bone to place at the target transform.</param>
     protected float GetMaxDistance(Bone bone1, Bone bone2, Bone bone3)
     {
         // get bone transforms
@@ -159,9 +165,9 @@ public abstract class TwoBoneIK : MonoBehaviour, IConstraint
         r3 = Quaternion.Slerp(r3, targetRot, weight);
 
         // update bones
-        bone1.SetGoalTransform(p1, r1);
-        bone2.SetGoalTransform(p2, r2);
-        bone3.SetGoalTransform(p3, r3);
+        bone1.SetTransform(p1, r1);
+        bone2.SetTransform(p2, r2);
+        bone3.SetTransform(p3, r3);
 
 #if UNITY_EDITOR
         if (m_debug)

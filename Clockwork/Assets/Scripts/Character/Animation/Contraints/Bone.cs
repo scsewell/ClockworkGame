@@ -32,10 +32,7 @@ public class Bone
 
     private Vector3 m_blendPosition;
     private Quaternion m_blendRotation;
-
-    private Vector3 m_goalPosition;
-    private Quaternion m_goalRotation;
-
+    
     public Vector3 Position => transform.position;
     public Quaternion Rotation => transform.rotation;
 
@@ -58,26 +55,11 @@ public class Bone
     {
         transform.SetPositionAndRotation(position, rotation);
     }
-
-    public void SetGoalTransform(Vector3 position, Quaternion rotation)
+    
+    public void ApplyBlendTransform(float weight)
     {
-        SetTransform(position, rotation);
-        m_goalPosition = LocalPosition;
-        m_goalRotation = LocalRotation;
-    }
-
-    public void SetGoalTransformLocal(Vector3 position, Quaternion rotation)
-    {
-        transform.localPosition = position;
-        transform.localRotation = rotation;
-        m_goalPosition = position;
-        m_goalRotation = rotation;
-    }
-
-    public void ApplyGoalTransform(float weight)
-    {
-        transform.localPosition = Vector3.Lerp(m_blendPosition, m_goalPosition, weight);
-        transform.localRotation = Quaternion.Slerp(m_blendRotation, m_goalRotation, weight);
+        transform.localPosition = Vector3.Lerp(LocalPosition, m_blendPosition, weight);
+        transform.localRotation = Quaternion.Slerp(LocalRotation, m_blendRotation, weight);
     }
 
     public Quaternion LookAt(Vector3 dir)
