@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public abstract class TwoBoneIK : MonoBehaviour, IRigConstraint
+public abstract class TwoBoneIK : MonoBehaviour, IConstraint
 {
     [SerializeField]
     protected bool m_debug = false;

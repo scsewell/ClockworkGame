@@ -1,4 +1,4 @@
-﻿public interface IRigConstraint
+﻿public interface IConstraint
 {
     /// <summary>
     /// The update order for the constraint. Lower values are evaluated first.

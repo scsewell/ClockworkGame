@@ -21,38 +21,12 @@ public class CharacterAnimation : MonoBehaviour
     [Header("Constraints")]
     [SerializeField] private ArmIK m_leftArm;
     [SerializeField] private ArmIK m_rightArm;
-
-    [Serializable]
-    private class LookAtBone
-    {
-        public Transform transform = null;
-        [Range(0f, 1f)]
-        public float weight = 1.0f;
-        [Range(0f, 179f)]
-        public float clampAngle = 45.0f;
-        [Range(0.01f, 1f)]
-        public float smoothing = 0.125f;
-
-        [HideInInspector]
-        public float lastDirWeight = 0f;
-        [HideInInspector]
-        public Quaternion lastLookRotation = Quaternion.identity;
-    }
-
-    [Header("LookAt")]
-
-    [SerializeField]
-    private LookAtBone[] m_headLook;
-
+    
     private Interactor m_interactor;
     private Movement m_movement;
     private Animator m_anim;
-    private IRigConstraint[] m_contraints;
-    private float m_lookAtWeight = 0f;
-
-    public Transform LookAtTarget { get; set; } = null;
-    public float LookAtWeight { get; set; } = 0f;
-
+    private IConstraint[] m_contraints;
+    
     private readonly Vector3[] m_shoulderPositions = new Vector3[2];
     public Vector3[] ShoulderPositions
     {
@@ -73,19 +47,14 @@ public class CharacterAnimation : MonoBehaviour
         m_anim = GetComponent<Animator>();
 
         // Get constraints and sort by update order
-        m_contraints = GetComponentsInChildren<IRigConstraint>(true);
+        m_contraints = GetComponentsInChildren<IConstraint>(true);
         Array.Sort(m_contraints, (a, b) => a.UpdateOrder.CompareTo(b.UpdateOrder));
 
         for (int i = 0; i < m_contraints.Length; i++)
         {
             m_contraints[i].Initialize();
         }
-
-        foreach (LookAtBone bone in m_headLook)
-        {
-            bone.lastLookRotation = bone.transform.rotation;
-        }
-
+        
         m_interactor.InteractionStarted += OnInteractionStarted;
         m_interactor.InteractionEnded += OnInteractionEnded;
     }
@@ -136,43 +105,12 @@ public class CharacterAnimation : MonoBehaviour
     public void PostAnimationUpdate()
     {
         // Update constraints
-        m_lookAtWeight = Mathf.Lerp(m_lookAtWeight, LookAtWeight, Time.deltaTime / 0.2f);
-        LookAt(m_headLook, LookAtTarget, m_lookAtWeight);
-        
         for (int i = 0; i < m_contraints.Length; i++)
         {
             m_contraints[i].UpdateConstraint();
         }
     }
     
-    private void LookAt(LookAtBone[] bones, Transform target, float weight)
-    {
-        foreach (LookAtBone bone in m_headLook)
-        {
-            Transform t = bone.transform;
-
-            Quaternion lookRotation = t.rotation;
-            float dirWeight = 0;
-
-            if (target != null)
-            {
-                Vector3 lookDir = (target.position - t.position).normalized;
-                Vector3 lookCross = Vector3.Cross(t.forward, lookDir).normalized;
-                float angle = Vector3.SignedAngle(t.forward, lookDir, lookCross);
-
-                float clampedAngle = Mathf.Clamp(angle, -bone.clampAngle, bone.clampAngle);
-                Vector3 clampedDir = Quaternion.AngleAxis(clampedAngle, lookCross.normalized) * t.forward;
-
-                dirWeight = 1f - Mathf.Clamp01(Mathf.InverseLerp(bone.clampAngle, 180f, Mathf.Abs(angle)));
-                lookRotation = Quaternion.LookRotation(clampedDir, -t.right) * Quaternion.Euler(0, 0, -90);
-            }
-
-            bone.lastDirWeight = Mathf.MoveTowards(bone.lastDirWeight, dirWeight, Time.deltaTime / (2f * bone.smoothing));
-            bone.lastLookRotation = Quaternion.Slerp(bone.lastLookRotation, lookRotation, Time.deltaTime / bone.smoothing);
-            t.rotation = Quaternion.Slerp(t.rotation, bone.lastLookRotation, weight * bone.weight * bone.lastDirWeight);
-        }
-    }
-
     private void SetFloatLerp(string name, float target, float rate)
     {
         m_anim.SetFloat(name, Mathf.MoveTowards(m_anim.GetFloat(name), target, Time.deltaTime * rate));

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 [ExecuteAlways]
-public class RigLookAt : MonoBehaviour, IRigConstraint
+public class RigLookAt : MonoBehaviour, IConstraint
 {
     [SerializeField]
     private Transform m_target = null;
