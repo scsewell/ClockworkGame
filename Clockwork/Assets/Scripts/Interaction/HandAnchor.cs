@@ -41,8 +41,17 @@ public class HandAnchor
         return m_transform.position;
     }
 
-    public Quaternion GetHandRotation()
+    public Quaternion GetHandRotation(Bone hand, Vector3 fromDirection)
     {
-        return m_transform.rotation;
+        switch (m_rotateMode)
+        {
+            case RotateMode.Free:
+                return hand.LookAt(fromDirection);
+            case RotateMode.AboutPalm:
+                return hand.LookAt(Vector3.ProjectOnPlane(fromDirection, -m_transform.up));
+            case RotateMode.Locked:
+            default:
+                return m_transform.rotation * hand.LookAtRotationOffset;
+        }
     }
 }

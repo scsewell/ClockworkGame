@@ -79,10 +79,12 @@ public class Movement : MonoBehaviour
     private float m_lastJumpTime = float.NegativeInfinity;
     private float m_lastJumpLandTime = float.NegativeInfinity;
     private bool m_jumping = false;
+    private Vector3 m_lastVelocity = Vector3.zero;
 
     public bool IsGrounded { get; private set; } = true;
     public Vector3 Velocity => m_body.velocity;
     public float AngularVelocity { get; private set; } = 0f;
+    public Vector3 Acceleration => (m_body.velocity - m_lastVelocity) / Time.deltaTime;
     
     private void Awake()
     {
@@ -92,6 +94,8 @@ public class Movement : MonoBehaviour
 
     public void DoMovement()
     {
+        m_lastVelocity = m_body.velocity;
+
         // update grounding
         bool previouslyGrounded = IsGrounded;
 

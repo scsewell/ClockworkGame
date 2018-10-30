@@ -21,23 +21,23 @@ public class Bone
 
     [SerializeField]
     private LookAxis m_lookAtAxis;
-    public LookAxis LookAtAxis => m_lookAtAxis;
+    public Vector3 LookAtAxis => transform.rotation * GetLookAtAxis();
 
     [SerializeField]
     private Vector3 m_lookAtRotationOffset;
     public Quaternion LookAtRotationOffset => Quaternion.Euler(m_lookAtRotationOffset);
 
-    private Vector3 m_lastPosition;
-    private Quaternion m_lastRotation;
-
-    private Vector3 m_blendPosition;
-    private Quaternion m_blendRotation;
-    
     public Vector3 Position => transform.position;
     public Quaternion Rotation => transform.rotation;
 
     public Vector3 LocalPosition => transform.localPosition;
     public Quaternion LocalRotation => transform.localRotation;
+
+    private Vector3 m_lastPosition;
+    private Quaternion m_lastRotation;
+    
+    private Vector3 m_blendPosition;
+    private Quaternion m_blendRotation;
 
     public void StoreLastTransform()
     {
@@ -61,8 +61,18 @@ public class Bone
         transform.localPosition = Vector3.Lerp(LocalPosition, m_blendPosition, weight);
         transform.localRotation = Quaternion.Slerp(LocalRotation, m_blendRotation, weight);
     }
-
+    
     public Quaternion LookAt(Vector3 dir)
+    {
+        return Quaternion.LookRotation(dir, LookAtAxis) * LookAtRotationOffset;
+    }
+
+    public Quaternion LookAt(Vector3 dir, Vector3 up)
+    {
+        return Quaternion.LookRotation(dir, up) * LookAtRotationOffset;
+    }
+
+    private Vector3 GetLookAtAxis()
     {
         Vector3 axis = Vector3.zero;
         switch (m_lookAtAxis)
@@ -74,12 +84,6 @@ public class Bone
             case LookAxis.ZNeg: axis = Vector3.back; break;
             case LookAxis.ZPos: axis = Vector3.forward; break;
         }
-
-        return Quaternion.LookRotation(dir, transform.rotation * axis) * LookAtRotationOffset;
-    }
-
-    public Quaternion LookAt(Vector3 dir, Vector3 up)
-    {
-        return Quaternion.LookRotation(dir, up) * LookAtRotationOffset;
+        return axis;
     }
 }

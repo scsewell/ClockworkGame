@@ -2657,17 +2657,17 @@ PrefabInstance:
     - target: {fileID: 6732567914789359884, guid: b34ed92a181996d4fac69d16387a73e4,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -13.694196
+      value: -13.694
       objectReference: {fileID: 0}
     - target: {fileID: 6732567914789359884, guid: b34ed92a181996d4fac69d16387a73e4,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.6130397
+      value: 0.638
       objectReference: {fileID: 0}
     - target: {fileID: 6732567914789359884, guid: b34ed92a181996d4fac69d16387a73e4,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.07300378
+      value: 0.073
       objectReference: {fileID: 0}
     - target: {fileID: 6732567914789359884, guid: b34ed92a181996d4fac69d16387a73e4,
         type: 3}
@@ -2836,17 +2836,17 @@ MonoBehaviour:
   affectSpecular: 1
   nonLightmappedOnly: 0
   lightTypeExtent: 0
-  spotLightShape: 0
-  shapeWidth: 0.5
-  shapeHeight: 0.5
+  spotLightShape: 1
+  shapeWidth: 30
+  shapeHeight: 20
   aspectRatio: 1
   shapeRadius: 0
-  maxSmoothness: 0.99
+  maxSmoothness: 0.36
   applyRangeAttenuation: 1
   useOldInspector: 0
   featuresFoldout: 1
   showAdditionalSettings: 1
-  displayLightIntensity: 230000
+  displayLightIntensity: 400000
   displayAreaLightEmissiveMesh: 0
   lightLayers: 1
   shadowSoftness: 0.5
@@ -2863,9 +2863,9 @@ Light:
   serializedVersion: 8
   m_Type: 0
   m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
-  m_Intensity: 18302.818
+  m_Intensity: 31830.988
   m_Range: 121.81
-  m_SpotAngle: 80
+  m_SpotAngle: 100
   m_CookieSize: 10
   m_Shadows:
     m_Type: 1
@@ -2897,13 +2897,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 596197410}
-  m_LocalRotation: {x: -0.06258987, y: -0.8024934, z: 0.25561035, w: -0.53549075}
-  m_LocalPosition: {x: -60.3, y: 24.4, z: 66.7}
+  m_LocalRotation: {x: -0.011349775, y: -0.6321869, z: 0.038961418, w: -0.77375257}
+  m_LocalPosition: {x: -80.8, y: 19, z: 72.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 56212959}
   m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 28.508001, y: -250.327, z: -11.374001}
+  m_LocalEulerAnglesHint: {x: 3.8320003, y: -281.588, z: -2.6390002}
 --- !u!1 &596916226
 GameObject:
   m_ObjectHideFlags: 0

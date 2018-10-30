@@ -18,6 +18,23 @@ public class CharacterAnimation : MonoBehaviour
     [Range(0f, 45f)]
     private float m_pivotAngle = 20f;
 
+    [Header("Tilting")]
+
+    [SerializeField]
+    [Tooltip("How many degrees to tilt per unit of acceleration.")]
+    [Range(0f, 30f)]
+    private float m_tiltScale = 3.0f;
+
+    [SerializeField]
+    [Tooltip("How maximum tilt in degrees.")]
+    [Range(0f, 30f)]
+    private float m_maxTilt = 10f;
+
+    [SerializeField]
+    [Tooltip("The amount of smoothing applied to the tilt effect.")]
+    [Range(0.01f, 1f)]
+    private float m_tiltSmoothing = 0.25f;
+
     [Header("Constraints")]
     [SerializeField] private ArmIK m_leftArm;
     [SerializeField] private ArmIK m_rightArm;
@@ -26,6 +43,7 @@ public class CharacterAnimation : MonoBehaviour
     private Movement m_movement;
     private Animator m_anim;
     private IConstraint[] m_contraints;
+    private float m_tilt = 0;
     
     private readonly Vector3[] m_shoulderPositions = new Vector3[2];
     public Vector3[] ShoulderPositions
@@ -100,6 +118,12 @@ public class CharacterAnimation : MonoBehaviour
         m_anim.SetFloat("PivotAnimSpeed", Mathf.Abs(angVel) / 180);
 
         m_anim.SetBool("Grounded", m_movement.IsGrounded);
+
+        // tilt to face direction of acceleration
+        float tilt = Mathf.Clamp(-m_movement.Acceleration.x * m_tiltScale, -m_maxTilt, m_maxTilt);
+        m_tilt = Mathf.Lerp(m_tilt, tilt, Time.deltaTime / m_tiltSmoothing);
+
+        transform.rotation = Quaternion.Euler(0, 0, m_tilt) * transform.parent.rotation;
     }
 
     public void PostAnimationUpdate()

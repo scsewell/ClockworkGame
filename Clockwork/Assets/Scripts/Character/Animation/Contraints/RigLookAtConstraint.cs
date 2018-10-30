@@ -16,16 +16,22 @@ public class RigLookAtConstraint : MonoBehaviour, IConstraint
         public float weight = 1.0f;
 
         [Tooltip("The maximum angle in degrees the bone may look away from the animated rotation.")]
-        [Range(0f, 179f)]
+        [Range(0f, 180f)]
         public float clampAngle = 45.0f;
+
+        [Tooltip("The angle in degrees between the look at and animaiton rotation at which the look at effect is fully blended out.")]
+        [Range(0f, 180f)]
+        public float blendAngle = 55.0f;
+
+        [HideInInspector] public float currentWeight = 0f;
+        [HideInInspector] public Quaternion lastLookOffset = Quaternion.identity;
     }
-    
+
     [SerializeField]
     private LookAtBone[] m_bones;
     
     private Transform m_target = null;
     private bool m_targetChanged = false;
-    private float m_weight = 0f;
     private float m_oldTargetBlend = 0;
 
     public Transform Target
@@ -55,8 +61,6 @@ public class RigLookAtConstraint : MonoBehaviour, IConstraint
 
     public void UpdateConstraint()
     {
-        m_weight = Mathf.Lerp(m_weight, Weight, Time.deltaTime / 0.2f);
-
         if (m_targetChanged)
         {
             // Remember the transform looking at the previous target
@@ -70,26 +74,29 @@ public class RigLookAtConstraint : MonoBehaviour, IConstraint
 
         foreach (LookAtBone bone in m_bones)
         {
-            Transform t = bone.transform;
-
-            Quaternion lookRotation = t.rotation;
+            Quaternion lookRotation = bone.Rotation;
             float dirWeight = 0;
 
             if (Target != null)
             {
-                Vector3 lookDir = (Target.position - t.position).normalized;
-                Vector3 lookCross = Vector3.Cross(t.forward, lookDir).normalized;
-                float angle = Vector3.SignedAngle(t.forward, lookDir, lookCross);
+                // get the rotation that looks as the target in world space
+                Vector3 lookDir = (Target.position - bone.Position).normalized;
+                Quaternion targetRotation = bone.LookAt(lookDir);
 
-                float clampedAngle = Mathf.Clamp(angle, -bone.clampAngle, bone.clampAngle);
-                Vector3 clampedDir = Quaternion.AngleAxis(clampedAngle, lookCross.normalized) * t.forward;
+                // clamp the rotation to not go too far from the current bone rotation
+                float angle = Quaternion.Angle(bone.Rotation, targetRotation);
+                dirWeight = 1f - Mathf.Clamp01(Mathf.InverseLerp(bone.clampAngle, bone.blendAngle, Mathf.Abs(angle)));
+                lookRotation = Quaternion.RotateTowards(bone.Rotation, targetRotation, bone.clampAngle);
 
-                dirWeight = 1f - Mathf.Clamp01(Mathf.InverseLerp(bone.clampAngle, 180f, Mathf.Abs(angle)));
-                lookRotation = bone.LookAt(clampedDir);
+                // transform the look rotation to at offset relative to the current rotation and smoothly move the look rotation offset to this new rotation
+                Quaternion lookOffset = Quaternion.Inverse(bone.Rotation) * lookRotation;
+                bone.lastLookOffset = Quaternion.Slerp(bone.lastLookOffset, lookOffset, Time.deltaTime * 12 * (dirWeight + 0.2f));
+                lookRotation = bone.Rotation * bone.lastLookOffset;
             }
-            
+
             // apply the look at rotation offset
-            t.rotation = Quaternion.Slerp(t.rotation, lookRotation, m_weight * bone.weight * dirWeight);
+            bone.currentWeight = Mathf.MoveTowards(bone.currentWeight, Weight * bone.weight * dirWeight, Time.deltaTime / m_blendDuration);
+            bone.transform.rotation = Quaternion.Slerp(bone.Rotation, lookRotation, bone.currentWeight);
         }
 
         // blend from the previous transforms for smooth target swtiches

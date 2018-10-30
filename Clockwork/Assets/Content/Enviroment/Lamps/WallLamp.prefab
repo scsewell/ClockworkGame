@@ -28,7 +28,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1309584134308465939}
   m_LocalRotation: {x: 0.47112212, y: 0.0006337164, z: -0.03344234, w: 0.88143355}
-  m_LocalPosition: {x: 0, y: -0.062, z: 0.118}
+  m_LocalPosition: {x: -0.131, y: 0.012, z: 0.083}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1309584134326019627}
@@ -47,7 +47,7 @@ Light:
   m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
   m_Intensity: 43.76761
   m_Range: 20
-  m_SpotAngle: 120
+  m_SpotAngle: 140
   m_CookieSize: 10
   m_Shadows:
     m_Type: 1
@@ -57,7 +57,7 @@ Light:
     m_Bias: 0.05
     m_NormalBias: 0.4
     m_NearPlane: 0.2
-  m_Cookie: {fileID: 0}
+  m_Cookie: {fileID: 2800000, guid: b6f56bfc15cb8dc40890c80cc89a2bc0, type: 3}
   m_DrawHalo: 0
   m_Flare: {fileID: 0}
   m_RenderMode: 0
@@ -90,7 +90,7 @@ MonoBehaviour:
   punctualIntensity: 600
   areaIntensity: 200
   enableSpotReflector: 0
-  m_InnerSpotPercent: 46.9
+  m_InnerSpotPercent: 45
   lightDimmer: 1
   volumetricDimmer: 0
   lightUnit: 0
@@ -106,7 +106,7 @@ MonoBehaviour:
   shapeHeight: 0.5
   aspectRatio: 1
   shapeRadius: 0
-  maxSmoothness: 0.99
+  maxSmoothness: 1
   applyRangeAttenuation: 1
   useOldInspector: 0
   featuresFoldout: 1
@@ -130,7 +130,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Version: 1
-  shadowResolution: 1024
+  shadowResolution: 2048
   shadowDimmer: 1
   shadowFadeDistance: 10000
   contactShadows: 0

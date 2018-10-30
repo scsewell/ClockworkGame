@@ -167,8 +167,6 @@ public class Waterwheel : MonoBehaviour
             {
                 m_lowerAngVelocity *= 0.2f;
                 m_upperGearConnected = true;
-                m_thunkSound.pitch = Random.Range(0.85f, 1.15f);
-                m_thunkSound.Play();
             }
             m_upperAngVelocity = m_lowerAngVelocity;
             m_upperRotation -= deltaAngle * 2.5f * Time.deltaTime;

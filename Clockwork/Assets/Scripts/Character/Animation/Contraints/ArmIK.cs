@@ -16,11 +16,16 @@ public class ArmIK : TwoBoneIK
     [SerializeField]
     private Bone m_hand;
 
+    [SerializeField]
+    [Tooltip("Position offset applied to the hand relative to anchor positions.")]
+    private Vector3 m_handOffset = Vector3.zero;
+
     private Bone[] m_bones = null;
     private HandAnchor m_target = null;
     private bool m_targetChanged = false;
     private float m_oldTargetBlend = 0;
     private float m_hasTargetBlend = 0;
+    private Vector3 m_lastElbowPos;
 
     public HandAnchor Target
     {
@@ -56,6 +61,7 @@ public class ArmIK : TwoBoneIK
         {
             bone.StoreBlendTransform();
         }
+        m_lastElbowPos = m_forearm.Position;
     }
 
     public override void UpdateConstraint()
@@ -73,9 +79,16 @@ public class ArmIK : TwoBoneIK
 
         m_hasTargetBlend = Mathf.MoveTowards(m_hasTargetBlend, Target != null ? 1f : 0f, Time.deltaTime / m_blendDuration);
         float hasTargetBlend = Mathf.SmoothStep(0f, 1f, m_hasTargetBlend);
-        
-        Vector3 pos = Target != null ? Target.GetHandPosition() : Vector3.zero;
-        Quaternion rot = Target != null ? Target.GetHandRotation() : Quaternion.identity;
+
+        Vector3 pos = Vector3.zero;
+        Quaternion rot = Quaternion.identity;
+
+        if (Target != null)
+        {
+            pos = Target.GetHandPosition();
+            rot = Target.GetHandRotation(m_hand, pos - m_lastElbowPos);
+            pos += rot * m_handOffset;
+        }
 
         DoIK(m_upperArm, m_forearm, m_hand, pos, rot, Weight * hasTargetBlend);
 
@@ -88,5 +101,6 @@ public class ArmIK : TwoBoneIK
             bone.ApplyBlendTransform(oldTargetBlend);
             bone.StoreLastTransform();
         }
+        m_lastElbowPos = m_forearm.Position;
     }
 }
