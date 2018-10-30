@@ -37,7 +37,7 @@ public class Lever : Interactable
 
     private void Update()
     {
-        float input = IsInteracting ? Input.GetAxis(m_isVertical ? "Vertical" : "Horizontal") : 0f;
+        float input = IsGrabbed ? Input.GetAxis(m_isVertical ? "Vertical" : "Horizontal") : 0f;
 
         m_value = Mathf.MoveTowards(m_value, input, 2f * Time.deltaTime / m_traversalTime);
 

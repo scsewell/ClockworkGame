@@ -35,6 +35,18 @@ public class CharacterAnimation : MonoBehaviour
     [Range(0.01f, 1f)]
     private float m_tiltSmoothing = 0.25f;
 
+    [Header("Leaning")]
+
+    [SerializeField]
+    [Tooltip("The strength of the leaning effect.")]
+    [Range(0.01f, 2f)]
+    private float m_leanScale = 0.25f;
+
+    [SerializeField]
+    [Tooltip("The amount of smoothing applied to the lean effect.")]
+    [Range(0.01f, 1f)]
+    private float m_leanSmoothing = 0.25f;
+
     [Header("Constraints")]
     [SerializeField] private ArmIK m_leftArm;
     [SerializeField] private ArmIK m_rightArm;
@@ -44,7 +56,8 @@ public class CharacterAnimation : MonoBehaviour
     private Animator m_anim;
     private IConstraint[] m_contraints;
     private float m_tilt = 0;
-    
+    private Quaternion m_lean = Quaternion.identity;
+
     private readonly Vector3[] m_shoulderPositions = new Vector3[2];
     public Vector3[] ShoulderPositions
     {
@@ -55,7 +68,7 @@ public class CharacterAnimation : MonoBehaviour
             return m_shoulderPositions;
         }
     }
-
+    
     public float ArmLength => Mathf.Max(m_leftArm.MaxReach, m_rightArm.MaxReach);
 
     private void Awake()
@@ -73,31 +86,50 @@ public class CharacterAnimation : MonoBehaviour
             m_contraints[i].Initialize();
         }
         
-        m_interactor.InteractionStarted += OnInteractionStarted;
         m_interactor.InteractionEnded += OnInteractionEnded;
     }
 
     private void OnDestroy()
     {
-        m_interactor.InteractionStarted -= OnInteractionStarted;
         m_interactor.InteractionEnded -= OnInteractionEnded;
     }
-
-    private void OnInteractionStarted(IInteractable interactable)
-    {
-        m_leftArm.Target = m_interactor.GetFreeHandAnchorByDistance(m_leftArm.ShoulderPosition);
-        m_rightArm.Target = m_interactor.GetFreeHandAnchorByDistance(m_rightArm.ShoulderPosition);
-    }
-
+    
     private void OnInteractionEnded(IInteractable interactable)
     {
         m_leftArm.Target = null;
         m_rightArm.Target = null;
     }
-    
+
     public void PreAnimationUpdate()
     {
-        // set animator properties
+        // Decide where to put hands. If nothing can be reached stop interaction
+        if (m_interactor.IsInteracting && !AssignHandAnchors(m_interactor.CurrentInteration, m_leftArm, m_rightArm))
+        {
+            m_interactor.EndInteraction();
+        }
+
+        // update animator
+        SetAnimatorProperties();
+
+        // set rotation
+        UpdateTilt();
+        UpdateLean();
+        transform.rotation = Quaternion.Euler(0, 0, m_tilt) * m_lean * transform.parent.rotation;
+    }
+
+    public void PostAnimationUpdate()
+    {
+        // update all bone constraints
+        for (int i = 0; i < m_contraints.Length; i++)
+        {
+            m_contraints[i].UpdateConstraint();
+        }
+        
+        m_interactor.IsGrabbing = m_leftArm.IsGrabbingTarget || m_rightArm.IsGrabbingTarget;
+    }
+
+    private void SetAnimatorProperties()
+    {
         Vector3 velocity = m_movement.Velocity;
         float speedH = Mathf.Abs(velocity.x);
 
@@ -118,23 +150,87 @@ public class CharacterAnimation : MonoBehaviour
         m_anim.SetFloat("PivotAnimSpeed", Mathf.Abs(angVel) / 180);
 
         m_anim.SetBool("Grounded", m_movement.IsGrounded);
+    }
 
-        // tilt to face direction of acceleration
+    /// <summary>
+    /// Angle the character in the direction it is accelerating
+    /// </summary>
+    private void UpdateTilt()
+    {
         float tilt = Mathf.Clamp(-m_movement.Acceleration.x * m_tiltScale, -m_maxTilt, m_maxTilt);
         m_tilt = Mathf.Lerp(m_tilt, tilt, Time.deltaTime / m_tiltSmoothing);
-
-        transform.rotation = Quaternion.Euler(0, 0, m_tilt) * transform.parent.rotation;
     }
 
-    public void PostAnimationUpdate()
+    /// <summary>
+    /// Angle the character torwards elements being interacted with.
+    /// </summary>
+    private void UpdateLean()
     {
-        // Update constraints
-        for (int i = 0; i < m_contraints.Length; i++)
+        Vector3 leftDir = m_leftArm.Target != null ? transform.position - m_leftArm.Target.Position : Vector3.zero;
+        Vector3 rightDir = m_rightArm.Target != null ? transform.position - m_rightArm.Target.Position : Vector3.zero;
+        Vector3 interactDir = Vector3.ProjectOnPlane(leftDir + rightDir, Vector3.up);
+
+        Quaternion lean = Quaternion.identity;
+        if (interactDir.magnitude > 0.01f)
         {
-            m_contraints[i].UpdateConstraint();
+            Vector3 leanDir = interactDir.normalized + (Vector3.up * (interactDir.magnitude * m_leanScale));
+            Vector3 cross = Vector3.Cross(leanDir, Vector3.up);
+            float angle = Vector3.SignedAngle(interactDir.normalized, leanDir, cross);
+            lean = Quaternion.AngleAxis(angle, cross);
         }
+
+        m_lean = Quaternion.Slerp(m_lean, lean, Time.deltaTime / m_leanSmoothing);
     }
-    
+
+    private HandAnchor[] m_handTargetsTemp = new HandAnchor[0];
+
+    /// <summary>
+    /// Sets arms to use the closest free hand anchor on the specified interactable.
+    /// </summary>
+    /// <returns>True if any hand target was assigned.</returns>
+    private bool AssignHandAnchors(IInteractable interactable, params ArmIK[] arms)
+    {
+        Array.Resize(ref m_handTargetsTemp, arms.Length);
+
+        for (int i = 0; i < arms.Length; i++)
+        {
+            m_handTargetsTemp[i] = null;
+        }
+
+        bool assignedAnyTarget = false;
+        foreach (HandAnchor anchor in interactable.HandAnchors)
+        {
+            int closestIndex = -1;
+            float closestDistance = ArmLength;
+
+            for (int i = 0; i < arms.Length; i++)
+            {
+                ArmIK arm = arms[i];
+                Vector3 shoulder = arm.ShoulderPosition;
+                float distance = Vector3.Distance(shoulder, anchor.Position);
+
+                if (distance < closestDistance && (m_handTargetsTemp[i] == null || distance < Vector3.Distance(shoulder, m_handTargetsTemp[i].Position)))
+                {
+                    closestIndex = i;
+                    closestDistance = distance;
+                }
+            }
+
+            if (closestIndex >= 0)
+            {
+                m_handTargetsTemp[closestIndex] = anchor;
+                assignedAnyTarget = true;
+            }
+        }
+
+        for (int i = 0; i < arms.Length; i++)
+        {
+            arms[i].Target = m_handTargetsTemp[i];
+        }
+
+        return assignedAnyTarget;
+    }
+
     private void SetFloatLerp(string name, float target, float rate)
     {
         m_anim.SetFloat(name, Mathf.MoveTowards(m_anim.GetFloat(name), target, Time.deltaTime * rate));

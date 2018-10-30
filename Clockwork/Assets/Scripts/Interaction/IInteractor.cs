@@ -14,7 +14,12 @@
     /// The name of the interactor.
     /// </summary>
     string Name { get; }
-    
+
+    /// <summary>
+    /// Is the interactor grabbing onto the the current interactable.
+    /// </summary>
+    bool IsGrabbing { get; }
+
     /// <summary>
     /// Ends the current interaction if interacting.
     /// </summary>

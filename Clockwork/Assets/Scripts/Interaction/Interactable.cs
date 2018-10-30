@@ -19,6 +19,11 @@ public abstract class Interactable : MonoBehaviour, IInteractable
     public bool IsInteracting => CurrentInteractor != null;
 
     /// <summary>
+    /// Is this interactable currently grabbed.
+    /// </summary>
+    public bool IsGrabbed => IsInteracting && CurrentInteractor.IsGrabbing;
+
+    /// <summary>
     /// Should interactors be allowed to move while interacting with this.
     /// </summary>
     public virtual bool AllowMovement { get; } = true;

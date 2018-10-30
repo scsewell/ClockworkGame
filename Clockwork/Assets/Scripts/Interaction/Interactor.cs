@@ -6,6 +6,7 @@
 public class Interactor : MonoBehaviour, IInteractor
 {
     private IInteractable m_currentInteration = null;
+    private bool m_isGrabbing = false;
 
     /// <summary>
     /// The interaction that this interactor is currently interacting with.
@@ -38,6 +39,15 @@ public class Interactor : MonoBehaviour, IInteractor
     /// Is this interactor is currently interacting.
     /// </summary>
     public bool IsInteracting => CurrentInteration != null;
+
+    /// <summary>
+    /// Is the interactor grabbing onto the the current interactable.
+    /// </summary>
+    public bool IsGrabbing
+    {
+        get { return IsInteracting && m_isGrabbing; }
+        set { m_isGrabbing = value; }
+    }
 
     /// <summary>
     /// The name of the interactor.
@@ -73,32 +83,6 @@ public class Interactor : MonoBehaviour, IInteractor
     public void EndInteraction()
     {
         CurrentInteration = null;
-    }
-
-    /// <summary>
-    /// Gets the closest hand anchor on the current interactable to a point.
-    /// </summary>
-    /// <param name="point">The point to measure distance from.</param>
-    /// <returns>The closest hand anchor if any is found.</returns>
-    public HandAnchor GetFreeHandAnchorByDistance(Vector3 point)
-    {
-        HandAnchor closest = null;
-        float minDistance = float.PositiveInfinity;
-
-        foreach (HandAnchor anchor in CurrentInteration.HandAnchors)
-        {
-            if (!anchor.occupied)
-            {
-                float distance = Vector3.Distance(point, anchor.Position);
-                if (minDistance > distance)
-                {
-                    minDistance = distance;
-                    closest = anchor;
-                }
-            }
-        }
-
-        return closest;
     }
     
     private IInteractable GetClosestInteractable(float distance, params Vector3[] points)

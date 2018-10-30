@@ -45,6 +45,9 @@ public class LegIK : TwoBoneIK
     [SerializeField]
     private Bone m_toe;
 
+    [SerializeField]
+    private Transform m_poleTarget = null;
+
     private Animator m_anim;
     private readonly RaycastHit[] m_hits = new RaycastHit[10];
     private Vector3 m_lastFootPos;
@@ -53,7 +56,9 @@ public class LegIK : TwoBoneIK
     private float m_blend = 0;
     private float m_blendOut = 0;
 
-    public override float MaxReach => GetMaxDistance(m_thigh, m_shin, m_foot);
+    protected override Bone Bone1 => m_thigh;
+    protected override Bone Bone2 => m_shin;
+    protected override Bone Bone3 => m_foot;
 
     public override void Initialize()
     {
@@ -61,16 +66,7 @@ public class LegIK : TwoBoneIK
         m_lastFootPos = m_foot.Position;
     }
 
-    private void OnDrawGizmos()
-    {
-        if (m_debug)
-        {
-            Gizmos.color = Color.cyan;
-            Gizmos.DrawWireSphere(m_spherePos, m_radius);
-        }
-    }
-
-    public override void UpdateConstraint()
+    public override void UpdateIK()
     {
         // find all ground under the foot
         Vector3 searchDir = Vector3.down;
@@ -115,7 +111,6 @@ public class LegIK : TwoBoneIK
 
             // only blend in the IK if the target foot position can actually be reached
             float targetDistance = Vector3.Distance(targetPos, m_thigh.Position);
-            float maxDistance = GetMaxDistance(m_thigh, m_shin, m_foot);
 
             // get animator IK weight
             float animWeight = 0;
@@ -127,7 +122,7 @@ public class LegIK : TwoBoneIK
             // Even if IK is not requested by the animation, check if the foot is passing though the floor.
             // If so, force IK to prevent that.
             bool forceIK = Vector3.Dot(m_foot.Position - footHit.point, footHit.normal) < m_footHeight;
-            float targetWeight = targetDistance < maxDistance ? (forceIK ? 1f : animWeight) : 0f;
+            float targetWeight = targetDistance < MaxReach ? (forceIK ? 1f : animWeight) : 0f;
 
             // blend proportionally to foot speed
             float speed = (m_lastFootPos - m_foot.Position).magnitude / Time.deltaTime;
@@ -136,7 +131,7 @@ public class LegIK : TwoBoneIK
             
             // Apply the IK contraint
             float weight = Weight * m_blend;
-            DoIK(m_thigh, m_shin, m_foot, targetPos, targetRot, weight);
+            DoIK(targetPos, targetRot, m_poleTarget.position, weight);
 
             // make sure the toes are not rotated since it is assumed the foot is flat against the surface
             m_toe.transform.localRotation = Quaternion.Slerp(m_toe.LocalRotation, m_toe.LookAtRotationOffset, weight);
@@ -157,4 +152,18 @@ public class LegIK : TwoBoneIK
         // record the foot position
         m_lastFootPos = m_foot.Position;
     }
+
+#if UNITY_EDITOR
+    private void OnDrawGizmos()
+    {
+        if (m_debug)
+        {
+            Gizmos.color = Color.cyan;
+            Gizmos.DrawWireSphere(m_spherePos, m_radius);
+
+            Gizmos.color = Color.green;
+            Gizmos.DrawWireSphere(m_poleTarget.position, 0.05f);
+        }
+    }
+#endif
 }

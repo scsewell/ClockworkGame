@@ -17,6 +17,9 @@ public class ArmIK : TwoBoneIK
     private Bone m_hand;
 
     [SerializeField]
+    private Transform m_poleTarget = null;
+
+    [SerializeField]
     [Tooltip("Position offset applied to the hand relative to anchor positions.")]
     private Vector3 m_handOffset = Vector3.zero;
 
@@ -26,6 +29,13 @@ public class ArmIK : TwoBoneIK
     private float m_oldTargetBlend = 0;
     private float m_hasTargetBlend = 0;
     private Vector3 m_lastElbowPos;
+
+    public bool IsGrabbingTarget { get; private set; } = false;
+    public Vector3 ShoulderPosition => m_upperArm.Position;
+
+    protected override Bone Bone1 => m_upperArm;
+    protected override Bone Bone2 => m_forearm;
+    protected override Bone Bone3 => m_hand;
 
     public HandAnchor Target
     {
@@ -49,10 +59,7 @@ public class ArmIK : TwoBoneIK
             }
         }
     }
-
-    public Vector3 ShoulderPosition => m_upperArm.Position;
-    public override float MaxReach => GetMaxDistance(m_upperArm, m_forearm, m_hand);
-
+    
     public override void Initialize()
     {
         m_bones = new Bone[] { m_upperArm, m_forearm, m_hand };
@@ -64,7 +71,7 @@ public class ArmIK : TwoBoneIK
         m_lastElbowPos = m_forearm.Position;
     }
 
-    public override void UpdateConstraint()
+    public override void UpdateIK()
     {
         if (m_targetChanged)
         {
@@ -90,7 +97,10 @@ public class ArmIK : TwoBoneIK
             pos += rot * m_handOffset;
         }
 
-        DoIK(m_upperArm, m_forearm, m_hand, pos, rot, Weight * hasTargetBlend);
+        DoIK(pos, rot, m_poleTarget.position, Weight * hasTargetBlend);
+
+        // check if the hand is at the target
+        IsGrabbingTarget = Vector3.Distance(m_hand.Position, pos) < 0.01f;
 
         // blend from the previous transforms for smooth target swtiches
         m_oldTargetBlend = Mathf.MoveTowards(m_oldTargetBlend, 0f, Time.deltaTime / m_blendDuration);
@@ -103,4 +113,15 @@ public class ArmIK : TwoBoneIK
         }
         m_lastElbowPos = m_forearm.Position;
     }
+
+#if UNITY_EDITOR
+    private void OnDrawGizmos()
+    {
+        if (m_debug)
+        {
+            Gizmos.color = Color.green;
+            Gizmos.DrawWireSphere(m_poleTarget.position, 0.05f);
+        }
+    }
+#endif
 }
