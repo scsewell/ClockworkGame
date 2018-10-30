@@ -32,6 +32,11 @@ public class LegIK : TwoBoneIK
     private float m_blendDuration = 0.2f;
 
     [SerializeField]
+    [Tooltip("The additional blend speed used to switch to IK mode when the foot is clipping the floor.")]
+    [Range(1f, 10f)]
+    private float m_forceIKBlendMultiplier = 3.0f;
+
+    [SerializeField]
     private string m_weightCurveName = string.Empty;
 
     [Header("Bones")]
@@ -127,7 +132,7 @@ public class LegIK : TwoBoneIK
             // blend proportionally to foot speed
             float speed = (m_lastFootPos - m_foot.Position).magnitude / Time.deltaTime;
             float duration = Mathf.Lerp(5 * m_blendDuration, m_blendDuration, speed / 10.0f);
-            m_blend = Mathf.MoveTowards(m_blend, targetWeight, Time.deltaTime / duration);
+            m_blend = Mathf.MoveTowards(m_blend, targetWeight, Time.deltaTime / (duration / (forceIK ? m_forceIKBlendMultiplier : 1f)));
             
             // Apply the IK contraint
             float weight = Weight * m_blend;
