@@ -556,7 +556,7 @@ MonoBehaviour:
   m_springStrength: 3500
   m_springDamping: 245
   m_massScale: 150
-  m_distance: 0.25
+  m_distance: 0.475
 --- !u!1 &7218924146293588755
 GameObject:
   m_ObjectHideFlags: 0

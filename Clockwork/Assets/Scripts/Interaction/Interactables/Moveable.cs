@@ -41,16 +41,15 @@ public class Moveable : Interactable
         m_joint = gameObject.AddComponent<ConfigurableJoint>();
 
         // determine the anchor points
-        Vector3 connectedAnchor = Vector3.up;
-        Vector3 anchor = transform.InverseTransformPoint(interactor.transform.InverseTransformPoint(connectedAnchor));
-        
         CapsuleCollider collider = interactor.GetComponentInParent<CapsuleCollider>();
         float distanceOffset = m_distance + m_collider.bounds.extents.x;
         if (collider != null)
         {
             distanceOffset += collider.radius;
         }
-        anchor = new Vector3(Mathf.Sign(anchor.x) * distanceOffset / transform.localScale.x, 0, 0);
+
+        Vector3 delta = interactor.transform.position - transform.position;
+        Vector3 anchor = new Vector3(Mathf.Sign(delta.x) * distanceOffset / transform.localScale.x, 0, 0);
 
         // set the joing properties
         m_joint.xMotion = ConfigurableJointMotion.Limited;
@@ -59,7 +58,7 @@ public class Moveable : Interactable
 
         m_joint.anchor = anchor;
         m_joint.autoConfigureConnectedAnchor = false;
-        m_joint.connectedAnchor = connectedAnchor;
+        m_joint.connectedAnchor = Vector3.up;
         m_joint.connectedBody = interactor;
         m_joint.enableCollision = true;
         m_joint.massScale = m_massScale;

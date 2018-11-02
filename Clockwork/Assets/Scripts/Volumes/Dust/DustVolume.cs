@@ -4,10 +4,8 @@ using Framework.Volumes;
 public class DustVolume : Volume<DustVolume, DustVolumeManager>
 {
     [Header("Profile")]
-
-    [Range(0f, 1f)]
-    public float strength = 0.1f;
     
+    public Color color = Color.black;
     public Vector3 windMin = Vector3.zero;
     public Vector3 windMax = Vector3.zero;
 

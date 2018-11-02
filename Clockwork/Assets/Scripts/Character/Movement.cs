@@ -20,6 +20,10 @@ public class Movement : MonoBehaviour
     [Range(0f, 5f)]
     private float m_groundingVelocity = 0.25f;
 
+    [SerializeField]
+    [Range(0f, 90f)]
+    private float m_groundingAngle = 45f;
+
 
     [Header("Pivoting")]
 
@@ -40,7 +44,7 @@ public class Movement : MonoBehaviour
 
     [SerializeField]
     [Range(0f, 10f)]
-    private float m_jumpSpeed = 10.0f;
+    private float m_jumpHeight = 1.0f;
 
 
     [Header("Landing")]
@@ -192,7 +196,7 @@ public class Movement : MonoBehaviour
 
             if (m_jump)
             {
-                velocity.y = m_jumpSpeed;
+                velocity.y = Mathf.Sqrt(2 * -Physics.gravity.y * m_jumpHeight);
                 m_jump = false;
                 m_jumping = true;
             }
@@ -200,7 +204,7 @@ public class Movement : MonoBehaviour
         else if (previouslyGrounded && !m_jumping)
         {
             IsGrounded = CheckGrounded(out groundHit, m_groundingAssistDistance);
-            if (Mathf.Abs(Vector3.Angle(groundHit.normal, Vector3.up)) < 85f)
+            if (Mathf.Abs(Vector3.Angle(groundHit.normal, Vector3.up)) < m_groundingAngle)
             {
                 velocity = Vector3.ProjectOnPlane(velocity, groundHit.normal);
                 velocity.y -= m_groundingVelocity;

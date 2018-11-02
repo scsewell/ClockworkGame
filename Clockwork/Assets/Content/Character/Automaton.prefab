@@ -900,7 +900,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd2f9b980a0a2994ab6268c82d0ff7ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_debug: 1
+  m_debug: 0
   m_freeDistance: 0.065
   m_maxAngle: 170
   m_weight: 1
@@ -2145,11 +2145,12 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 2049
   m_groundingAssistDistance: 0.15
-  m_groundingVelocity: 0.25
+  m_groundingVelocity: 0.05
+  m_groundingAngle: 50
   m_pivotSpeed: 1.75
   m_jumpBufferDuration: 0.175
   m_jumpWait: 0.1
-  m_jumpSpeed: 5
+  m_jumpHeight: 1.365
   m_landHeightCurve:
     serializedVersion: 2
     m_Curve:
@@ -2615,7 +2616,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02a4ea964e354f34a8fc0260c6b1f922, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_debug: 1
+  m_debug: 0
   m_freeDistance: 0.115
   m_maxAngle: 175
   m_weight: 1
@@ -3740,7 +3741,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02a4ea964e354f34a8fc0260c6b1f922, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_debug: 1
+  m_debug: 0
   m_freeDistance: 0.115
   m_maxAngle: 175
   m_weight: 1
@@ -3894,7 +3895,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd2f9b980a0a2994ab6268c82d0ff7ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_debug: 1
+  m_debug: 0
   m_freeDistance: 0.065
   m_maxAngle: 170
   m_weight: 1

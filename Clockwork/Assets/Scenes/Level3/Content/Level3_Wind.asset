@@ -9,6 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b44537b2e394b5b44a96ff952f1db95f, type: 3}
-  m_Name: Waterfall
+  m_Script: {fileID: 11500000, guid: d3667f956043bd848abe622c30aa55e2, type: 3}
+  m_Name: Level3_Wind
   m_EditorClassIdentifier: 
+  clip: {fileID: 8300000, guid: c12a7af75743a0847817cdb0aca03aff, type: 3}
+  mixer: {fileID: 243272095693943486, guid: 28b8be49270548e44be31fd4d1aa1e52, type: 2}
+  loop: 1
+  pitch: 1
+  pan: 0
