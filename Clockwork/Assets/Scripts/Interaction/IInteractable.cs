@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using UnityEngine;
 
 /// <summary>
 /// The interface for things in the scene the character can interact with.
@@ -11,9 +12,14 @@ public interface IInteractable
     List<HandAnchor> HandAnchors { get; }
 
     /// <summary>
-    /// Should interactors be allowed to move while interacting with this.
+    /// How should interactors be allowed to move while interacting with this.
     /// </summary>
-    bool AllowMovement { get; }
+    InteractionMovementMode MovementMode { get; }
+    
+    /// <summary>
+    /// The position of the interactable.
+    /// </summary>
+    Vector3 Position { get; }
 
     /// <summary>
     /// Called when an interactor starts an interaction.

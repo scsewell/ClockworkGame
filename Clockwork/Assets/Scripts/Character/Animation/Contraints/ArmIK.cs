@@ -28,7 +28,6 @@ public class ArmIK : TwoBoneIK
     private bool m_targetChanged = false;
     private float m_oldTargetBlend = 0;
     private float m_hasTargetBlend = 0;
-    private Vector3 m_lastElbowPos;
 
     public bool IsGrabbingTarget { get; private set; } = false;
     public Vector3 ShoulderPosition => m_upperArm.Position;
@@ -68,7 +67,6 @@ public class ArmIK : TwoBoneIK
         {
             bone.StoreBlendTransform();
         }
-        m_lastElbowPos = m_forearm.Position;
     }
 
     public override void UpdateIK()
@@ -93,7 +91,12 @@ public class ArmIK : TwoBoneIK
         if (Target != null)
         {
             pos = Target.GetHandPosition();
-            rot = Target.GetHandRotation(m_hand, pos - m_lastElbowPos);
+
+            Transform chest = m_upperArm.transform.parent;
+            float chestDirFac = Vector3.Dot(pos - chest.position, chest.forward);
+            Vector3 handDir = pos - (chest.position + (chest.rotation * new Vector3(-0.2f, 0, -0.35f)));
+            
+            rot = Target.GetHandRotation(m_hand, handDir);
             pos += rot * m_handOffset;
         }
 
@@ -111,7 +114,6 @@ public class ArmIK : TwoBoneIK
             bone.ApplyBlendTransform(oldTargetBlend);
             bone.StoreLastTransform();
         }
-        m_lastElbowPos = m_forearm.Position;
     }
 
 #if UNITY_EDITOR

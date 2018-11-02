@@ -130,21 +130,26 @@ public class CharacterAnimation : MonoBehaviour
 
     private void SetAnimatorProperties()
     {
+        Movement.Medium medium = m_movement.GetCurrentMedium();
         Vector3 velocity = m_movement.Velocity;
+        Vector3 forward = m_movement.transform.forward;
+        float forwardVelocity = Vector3.Dot(velocity, forward);
+
         float speedH = Mathf.Abs(velocity.x);
 
-        float walkRun = Mathf.InverseLerp(m_movement.Ground.MinSpeed, m_runAnimationSpeed, speedH);
+        float walkRun = Mathf.InverseLerp(medium.MinSpeed, m_runAnimationSpeed, speedH);
         float walkRunSpeed = Mathf.LerpUnclamped(speedH / m_walkAnimationSpeed, speedH / m_runAnimationSpeed, walkRun);
 
-        float speedSmoothing = m_movement.Ground.MaxSpeed * 4.0f;
-        SetFloatLerp("SpeedH", Vector3.Dot(velocity, m_movement.transform.forward), speedSmoothing);
-        SetFloatLerp("SpeedV", velocity.y, speedSmoothing);
+        float speedSmoothing = medium.MaxSpeed * 4.0f;
+        SetFloatLerp("SpeedH", Mathf.Abs(forwardVelocity), speedSmoothing);
+        SetFloatLerp("VelocityH", forwardVelocity, speedSmoothing);
+        SetFloatLerp("VelocityV", velocity.y, speedSmoothing);
         SetFloatLerp("WalkRun", walkRun, 4.0f);
-        SetFloatSmooth("WalkRunSpeed", walkRunSpeed, 4.0f);
+        SetFloatSmooth("WalkRunSpeed", walkRunSpeed * Mathf.Sign(forwardVelocity), 4.0f);
         SetFloatSmooth("AirAnimSpeed", 0.25f + (0.05f * velocity.magnitude), 8.0f);
 
         float angVel = m_movement.AngularVelocity;
-        float angle = Mathf.Abs(Mathf.Asin(m_movement.transform.forward.z) * Mathf.Rad2Deg);
+        float angle = Mathf.Abs(Mathf.Asin(forward.z) * Mathf.Rad2Deg);
         m_anim.SetBool("PivotLeft", angle > m_pivotAngle && angVel < 0);
         m_anim.SetBool("PivotRight", angle > m_pivotAngle && angVel > 0);
         m_anim.SetFloat("PivotAnimSpeed", Mathf.Abs(angVel) / 180);

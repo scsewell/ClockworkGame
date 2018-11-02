@@ -22,11 +22,16 @@ public abstract class Interactable : MonoBehaviour, IInteractable
     /// Is this interactable currently grabbed.
     /// </summary>
     public bool IsGrabbed => IsInteracting && CurrentInteractor.IsGrabbing;
+    
+    /// <summary>
+    /// How should interactors be allowed to move while interacting with this.
+    /// </summary>
+    public virtual InteractionMovementMode MovementMode => InteractionMovementMode.CanMove;
 
     /// <summary>
-    /// Should interactors be allowed to move while interacting with this.
+    /// The position of the interactable.
     /// </summary>
-    public virtual bool AllowMovement { get; } = true;
+    public Vector3 Position => transform.position;
 
     protected virtual void OnEnable()
     {

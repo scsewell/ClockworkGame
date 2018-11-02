@@ -65,11 +65,10 @@ public class Movement : MonoBehaviour
 
     [SerializeField]
     private Medium m_ground = new Medium();
-    public Medium Ground => m_ground;
-
     [SerializeField]
     private Medium m_air = new Medium();
-    public Medium Air => m_air;
+    [SerializeField]
+    private Medium m_encumbered = new Medium();
 
     [Serializable]
     public class Medium
@@ -94,6 +93,7 @@ public class Movement : MonoBehaviour
     private readonly RaycastHit[] m_hits = new RaycastHit[20];
     private CapsuleCollider m_collider;
     private Rigidbody m_body;
+    private Interactor m_interactor;
     private AnimationSounds m_sounds;
 
     private bool m_jump = false;
@@ -116,6 +116,7 @@ public class Movement : MonoBehaviour
     {
         m_collider = GetComponent<CapsuleCollider>();
         m_body = GetComponent<Rigidbody>();
+        m_interactor = GetComponent<Interactor>();
         m_sounds = GetComponentInChildren<AnimationSounds>();
 
         m_baseHeight = m_collider.height;
@@ -124,8 +125,6 @@ public class Movement : MonoBehaviour
 
     public void DoMovement()
     {
-        m_lastVelocity = m_body.velocity;
-
         // update grounding
         bool previouslyGrounded = IsGrounded;
 
@@ -148,8 +147,12 @@ public class Movement : MonoBehaviour
         SetHeight(m_height);
 
         // do movement
-        Medium medium = IsGrounded ? m_ground : m_air;
+        Medium medium = GetCurrentMedium();
+
+        m_lastVelocity = m_body.velocity;
         Vector2 velocity = m_body.velocity;
+
+        bool canRotate = !m_interactor.IsInteracting || m_interactor.CurrentInteration.MovementMode == InteractionMovementMode.CanMove;
 
         const float deadzone = 0.01f;
         float moveH = Mathf.Abs(m_moveH) < deadzone ? 0 : Mathf.Sign(m_moveH) * Mathf.Lerp(medium.MinSpeed / medium.MaxSpeed, 1.0f, Mathf.Abs(m_moveH));
@@ -162,21 +165,29 @@ public class Movement : MonoBehaviour
             bool facingDesiredDir = transform.forward.x * moveH > 0f;
             bool velocityIsOpposite = Mathf.Abs(velocity.x) > 0.01f && Mathf.Sign(velocity.x) != Mathf.Sign(moveH);
 
-            targetVelocity = (facingDesiredDir || velocityIsOpposite) ? Mathf.Abs(transform.forward.x) * medium.MaxSpeed * moveH : 0;
+            targetVelocity = (facingDesiredDir || velocityIsOpposite || !canRotate) ? Mathf.Abs(transform.forward.x) * medium.MaxSpeed * moveH : 0;
         }
 
         velocity.x = Mathf.MoveTowards(velocity.x, targetVelocity, Time.deltaTime * medium.Acceleration);
-        
+
         if (IsGrounded)
         {
-            // rotate the character along the direction of travel
-            if (m_facingRight && Mathf.Abs(velocity.x) < 0.1f && moveH < -deadzone)
+            if (canRotate)
             {
-                m_facingRight = false;
+                // rotate the character along the direction of travel
+                if (m_facingRight && Mathf.Abs(velocity.x) < 0.1f && moveH < -deadzone)
+                {
+                    m_facingRight = false;
+                }
+                else if (!m_facingRight && Mathf.Abs(velocity.x) < 0.1f && moveH > deadzone)
+                {
+                    m_facingRight = true;
+                }
             }
-            else if (!m_facingRight && Mathf.Abs(velocity.x) < 0.1f && moveH > deadzone)
+            else if (m_interactor.IsInteracting && m_interactor.CurrentInteration.MovementMode == InteractionMovementMode.NoRotate)
             {
-                m_facingRight = true;
+                // force the character to face the interaction
+                m_facingRight = (m_interactor.CurrentInteration.Position - transform.position).x > 0;
             }
 
             if (m_jump)
@@ -209,13 +220,18 @@ public class Movement : MonoBehaviour
 
     public void SetInputs(PlayerInput input)
     {
-        m_moveH = input.moveH;
-
+        bool canMove = !m_interactor.IsInteracting || m_interactor.CurrentInteration.MovementMode != InteractionMovementMode.NoMove;
+        bool canJump = !m_interactor.IsInteracting;
+        
+        // set move input
+        m_moveH = canMove ? input.moveH : 0;
+        
         // buffer jump inputs
         bool jumpReady = Time.time - m_lastLandTime > m_jumpWait;
+        bool jumpRecentlyPressed = Time.time - m_lastJumpTime < m_jumpBufferDuration;
         bool isFacingSide = Mathf.Abs(transform.forward.x) > Mathf.Cos(10.0f * Mathf.Deg2Rad);
 
-        if (IsGrounded && isFacingSide && jumpReady && (input.jump || Time.time - m_lastJumpTime < m_jumpBufferDuration))
+        if (canJump && jumpReady && (input.jump || jumpRecentlyPressed) && IsGrounded && isFacingSide)
         {
             m_jump = true;
             m_lastJumpTime = float.NegativeInfinity;
@@ -225,6 +241,19 @@ public class Movement : MonoBehaviour
         {
             m_lastJumpTime = Time.time;
         }
+    }
+
+    public Medium GetCurrentMedium()
+    {
+        if (!IsGrounded)
+        {
+            return m_air;
+        }
+        else if (m_interactor.IsInteracting && m_interactor.CurrentInteration.MovementMode != InteractionMovementMode.NoMove)
+        {
+            return m_encumbered;
+        }
+        return m_ground;
     }
 
     private void SetHeight(float height)

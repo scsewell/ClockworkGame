@@ -48,27 +48,23 @@ public class Automaton : MonoBehaviour
             m_interact = false;
         }
 
+        PlayerInput input = new PlayerInput(moveH, jump, m_interact);
+
         // check for interaction
         if (m_interact)
         {
-            if (!m_interactor.IsInteracting)
+            if (m_movement.IsGrounded && !m_interactor.IsInteracting)
             {
                 m_interactor.StartInteraction(m_anim.ArmLength, m_anim.ShoulderPositions);
             }
         }
-        else if (m_interactor.IsInteracting)
+
+        // stop interaction if not on the ground
+        if (m_interactor.IsInteracting && (!m_interact || !m_movement.IsGrounded))
         {
             m_interactor.EndInteraction();
         }
-
-        if (m_interactor.IsInteracting && !m_interactor.CurrentInteration.AllowMovement)
-        {
-            moveH = 0;
-            jump = false;
-        }
-
-        PlayerInput input = new PlayerInput(moveH, jump, m_interact);
-
+        
         // update sub components
         m_movement.SetInputs(input);
         m_anim.PreAnimationUpdate();

@@ -1,4 +1,6 @@
-﻿public interface IInteractor
+﻿using UnityEngine;
+
+public interface IInteractor
 {
     /// <summary>
     /// The interaction that this interactor is currently interacting with.
@@ -14,6 +16,11 @@
     /// The name of the interactor.
     /// </summary>
     string Name { get; }
+
+    /// <summary>
+    /// The object associated with the interactor.
+    /// </summary>
+    GameObject GameObject { get; }
 
     /// <summary>
     /// Is the interactor grabbing onto the the current interactable.

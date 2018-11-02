@@ -55,6 +55,11 @@ public class Interactor : MonoBehaviour, IInteractor
     public string Name => name;
 
     /// <summary>
+    /// The object associated with the interactor.
+    /// </summary>
+    public GameObject GameObject => gameObject;
+
+    /// <summary>
     /// Invoked when an interaction has started.
     /// </summary>
     public event InteractionStartedHandler InteractionStarted;
