@@ -197,6 +197,14 @@ public class Waterwheel : MonoBehaviour
 
         m_bridgeMiddle.position = m_bridgeMiddlePos.position;
 
+        Vector3 leftBridgeDir = m_bridgeLeft02.position - m_bridgeLeft01.position;
+        m_bridgeLeft01.rotation = Quaternion.LookRotation(leftBridgeDir) * Quaternion.Euler(90, 90, 0);
+        m_bridgeLeft02.rotation = Quaternion.LookRotation(-leftBridgeDir) * Quaternion.Euler(90, 90, 0);
+
+        Vector3 rightBridgeDir = m_bridgeRight02.position - m_bridgeRight01.position;
+        m_bridgeRight01.rotation = Quaternion.LookRotation(rightBridgeDir) * Quaternion.Euler(90, 90, 0);
+        m_bridgeRight02.rotation = Quaternion.LookRotation(-rightBridgeDir) * Quaternion.Euler(90, 90, 0);
+
         // set sound effects
         if ((oldlowerRaiseTarget > 0f && m_lowerRaiseTarget == 0f) ||
             (oldUpperRaiseTarget > 0f && m_upperRaiseTarget == 0f) ||

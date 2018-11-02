@@ -162,7 +162,11 @@ public class CharacterAnimation : MonoBehaviour
     /// </summary>
     private void UpdateTilt()
     {
-        float tilt = Mathf.Clamp(-m_movement.Acceleration.x * m_tiltScale, -m_maxTilt, m_maxTilt);
+        float tilt = 0;
+        if (!m_interactor.IsInteracting)
+        {
+            tilt = Mathf.Clamp(-m_movement.Acceleration.x * m_tiltScale, -m_maxTilt, m_maxTilt);
+        }
         m_tilt = Mathf.Lerp(m_tilt, tilt, Time.deltaTime / m_tiltSmoothing);
     }
 
