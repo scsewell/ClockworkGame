@@ -30,12 +30,14 @@ public class Cart : MonoBehaviour
     
     private void Update()
     {
+        // determine roughly how much the wheels are rotating relative to the cart body
         float angVel = 0;
         foreach (Rigidbody body in m_wheels)
         {
             angVel += (m_body.angularVelocity - body.angularVelocity).magnitude;
         }
 
+        // blend to the a new volume and pitch
         float targetVolume = (m_wheelVolumeScale * angVel) / m_wheels.Length;
         float targetPitch = (m_wheelPitchScale * angVel) / m_wheels.Length;
 
@@ -43,6 +45,7 @@ public class Cart : MonoBehaviour
         m_wheelSound.volume = Mathf.Lerp(m_wheelSound.volume, targetVolume, smoothing);
         m_wheelSound.pitch = Mathf.Lerp(m_wheelSound.pitch, targetPitch, smoothing);
 
+        // don't play the sound while it wouldn't be audible
         if (m_wheelSound.isPlaying && m_wheelSound.volume < 0.001f)
         {
             m_wheelSound.Pause();

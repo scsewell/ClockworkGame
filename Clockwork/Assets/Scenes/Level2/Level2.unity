@@ -1018,7 +1018,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 332933272}
   m_LocalRotation: {x: 0.00000007833012, y: -0.00000026831262, z: -0.92395055, w: 0.38251215}
-  m_LocalPosition: {x: -61.3, y: -0.1, z: 7.2}
+  m_LocalPosition: {x: -46.94, y: 0.05, z: 7.2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 490698147}
@@ -1038,7 +1038,7 @@ AudioSource:
   m_audioClip: {fileID: 8300000, guid: 8dab5555b825560428b55bd680077033, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
-  m_Pitch: 0.92
+  m_Pitch: 0.8
   Loop: 0
   Mute: 0
   Spatialize: 0
@@ -1046,7 +1046,7 @@ AudioSource:
   Priority: 116
   DopplerLevel: 1
   MinDistance: 0.3
-  MaxDistance: 70
+  MaxDistance: 90
   Pan2D: 0
   rolloffMode: 2
   BypassEffects: 0
@@ -10956,6 +10956,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Constraints
       value: 96
+      objectReference: {fileID: 0}
+    - target: {fileID: 5654368158515208533, guid: 221d43df51f7707489ce4e5d24782c07,
+        type: 3}
+      propertyPath: m_ConnectedAnchor.x
+      value: 0.57299995
+      objectReference: {fileID: 0}
+    - target: {fileID: 5654368158515208533, guid: 221d43df51f7707489ce4e5d24782c07,
+        type: 3}
+      propertyPath: m_ConnectedAnchor.y
+      value: -0.721
+      objectReference: {fileID: 0}
+    - target: {fileID: 5654368158515208533, guid: 221d43df51f7707489ce4e5d24782c07,
+        type: 3}
+      propertyPath: m_ConnectedAnchor.z
+      value: 0.582
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 221d43df51f7707489ce4e5d24782c07, type: 3}
