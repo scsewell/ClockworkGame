@@ -99,7 +99,7 @@ public class Waterwheel : MonoBehaviour
     private float m_lowerRaise;
     private float m_upperRaise;
     private float m_lowerRaiseTarget = 1.0f;
-    private float m_upperRaiseTarget = 1.0f;
+    private float m_upperRaiseTarget = 0.0f;
     private float m_initialYLower;
     private float m_initialYUpper;
     private float m_lowerRotation = 0f;

@@ -21,6 +21,7 @@ public class SceneChanger : MonoBehaviour
     {
         StartCoroutine(LoadScene(1));
         SceneManager.LoadScene(2, LoadSceneMode.Additive);
+        SceneManager.LoadScene(3, LoadSceneMode.Additive);
     }
 #endif
 
