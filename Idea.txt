@@ -1,0 +1,19 @@
+Menu is first scene area, seamless start game
+Start wired into sleep pod (crashes or already crashed through roof, decayed) or something, animate leaving. (double black bar cinematic)
+(Jump over rubble?)
+Title drop outdoors after leaving place
+
+Backwards walk animation (current is just forward walk, doesn't look quite right)
+
+Hand grab/ungrab sound
+Hand anchor stuff (make palm rotate mode work)
+
+Hanging lamp sway + camble going up perhaps
+Add detail to models level models (Cables from levers, console, etc.)
+Bake AO / GI
+Water stream edge mask, smooth connection to concrete
+
+Better jump animations / jump after foot strike
+
+soft paticles how?
+async scene loading/unloading system
